@@ -1,0 +1,26 @@
+{
+  "name": "citeguard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prep:scifact": "uv run python/prep_scifact.py",
+    "bench": "tsx src/bench/run.ts",
+    "test": "tsx --test src/*.test.ts src/**/*.test.ts",
+    "typecheck": "tsc"
+  },
+  "packageManager": "pnpm@10.0.0+sha512.b8fef5494bd3fe4cbd4edabd0745df2ee5be3e4b0b8b08fa643aa3e4c6702ccc0f00d68fa8a8c9858a735a0032485a44990ed2810526c875e416f001b17df12b",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

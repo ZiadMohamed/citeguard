@@ -30,7 +30,7 @@ const AGENTS = {
       { claim: item.claim, citation: item.citation, source },
       model,
     );
-    return { result, usage, sourceText: source?.text ?? "" };
+    return { result, usage, sourceText: source ? `${source.title}\n${source.text}` : "" };
   },
 };
 

@@ -15,9 +15,10 @@ describe("isQuoteGrounded", () => {
     assert.equal(isQuoteGrounded("reduced by 123% in the high-dose group", source), false);
   });
 
-  it("handles ellipses as in-order gaps", () => {
+  it("treats ellipses and line breaks as gaps between fragments", () => {
     assert.equal(isQuoteGrounded("Mean body weight ... No deaths occurred", source), true);
-    assert.equal(isQuoteGrounded("No deaths occurred ... Mean body weight", source), false);
+    assert.equal(isQuoteGrounded("No deaths occurred\nMean body weight gain", source), true);
+    assert.equal(isQuoteGrounded("Mean body weight ... Two deaths occurred", source), false);
   });
 
   it("rejects empty quotes", () => {

@@ -1,23 +1,19 @@
 /**
  * Checks that a quote the model returned really appears in the source.
- * Tolerates whitespace, case, punctuation and quote-style differences, and
- * treats "..." as a gap (each fragment must appear, in order).
+ * Tolerates whitespace, case, punctuation and quote-style differences. "..." and
+ * line breaks split the quote into fragments (e.g. non-adjacent table rows); every
+ * fragment must appear somewhere in the source.
  */
 export function isQuoteGrounded(quote: string, source: string): boolean {
   const fragments = quote
-    .split(/\.\.\.|…/)
+    .replace(/^\s*Title:\s*/i, "")
+    .split(/\.\.\.|…|\n/)
     .map(normalize)
     .filter((f) => f.length > 0);
   if (fragments.length === 0) return false;
 
   const haystack = normalize(source);
-  let from = 0;
-  for (const fragment of fragments) {
-    const idx = haystack.indexOf(fragment, from);
-    if (idx === -1) return false;
-    from = idx + fragment.length;
-  }
-  return true;
+  return fragments.every((f) => haystack.includes(f));
 }
 
 function normalize(s: string): string {

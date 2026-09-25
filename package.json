@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "prep:scifact": "uv run python/prep_scifact.py",
+    "prep:pmc": "uv run python/prep_pmc.py",
     "bench": "tsx src/bench/run.ts",
     "test": "tsx --test src/*.test.ts src/**/*.test.ts",
     "typecheck": "tsc"

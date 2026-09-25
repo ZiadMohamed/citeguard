@@ -1,0 +1,21 @@
+{"id": "pmc-0069", "label": "not_supported", "category": "not_in_source", "status": "confirmed", "note": "Within-group p-values (p < 0.01, p = 0.10) are not in the table; the table's p-values compare groups. The 0.10 match is a coincidence."}
+{"id": "pmc-0083", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "Table rows are labeled Participation/Collaboration while the caption and text say health education satisfaction/health behavior. Source is internally inconsistent."}
+{"id": "pmc-0031", "label": "not_supported", "category": "not_in_source", "status": "confirmed", "note": "Age range 23-65 is not in the cited table."}
+{"id": "pmc-0017", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "0.063/p=1.000 and 0.206/p=0.106 are pre-post and pre-follow-up comparisons, not RS-Combined vs Control (0.02, p=0.88)."}
+{"id": "pmc-0073", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "Text says placebo decreased by 2.7; table shows +2.7 (14.2)."}
+{"id": "pmc-0012", "label": "supported", "category": "interpretation", "status": "confirmed", "note": "'Indicating a high level' is a reasonable reading of 19.48 on a 5-25 scale. Agent false alarm."}
+{"id": "pmc-0072", "label": "supported", "category": "pedantic", "status": "confirmed", "note": "Table says 'testing rate'; claim says 'ever tested'. Same thing. Agent false alarm."}
+{"id": "pmc-0045", "label": "supported", "category": "pedantic", "status": "confirmed", "note": "Table reports p = 0.00; text says p < 0.001. Agent false alarm."}
+{"id": "pmc-0011", "label": "supported", "category": "interpretation", "status": "confirmed", "note": "'Reflecting a moderate level' is a reasonable reading of 10.55 on a 3-15 scale. Agent false alarm."}
+{"id": "pmc-0052", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "Claim uses the 'Polyp type' p-values (0.16, 0.38) for adenoma prevalence; the adenoma row reports 0.86 and 0.51. At minimum ambiguous; a reviewer should fix it."}
+{"id": "pmc-0034", "label": "supported", "category": "pedantic", "status": "confirmed", "note": "Table reports p = 0.00; text says p < 0.001. Agent false alarm."}
+{"id": "pmc-0054", "label": "supported", "category": "interpretation", "status": "confirmed", "note": "'High' scores and 'digital sexual violence prevention knowledge' vs table's 'Prevention knowledge' are reasonable. Agent false alarm."}
+{"id": "pmc-0047", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "Stage 2 AKI odds ratio is 0.33 [0.013-8.21]; the claimed 0.84 [0.26-2.69] is the stage 1 row."}
+{"id": "pmc-0095", "label": "not_supported", "category": "not_in_source", "status": "confirmed", "note": "Significant reduction between years (p < 0.05) is not in the table; the table's p-values compare groups and second-year PP is p = 0.51."}
+{"id": "pmc-0088", "label": "not_supported", "category": "author_error", "status": "confirmed", "note": "Combined pre-test is 4.25 (claim ~4.19) and Control pre-test is 4.17 (claim 4.19)."}
+{"id": "pmc-0181", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "Dropped 'nonsignificant' from 'favorable trend' (p = 0.230). Mild but real. Agent miss."}
+{"id": "pmc-0109", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'No significant differences' became 'No differences'. Mild but real. Agent miss."}
+{"id": "pmc-0115", "label": "supported", "category": "not_an_error", "status": "confirmed", "note": "Dropping 'At 1 month' leaves a true claim (the 1-month score is 14.82). Injected error is not actually an error."}
+{"id": "pmc-0193", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'Suggesting' became 'showing' parallel improvement from a nonsignificant interaction. Agent miss."}
+{"id": "pmc-0157", "label": "supported", "category": "not_an_error", "status": "confirmed", "note": "'Slightly lower' became 'lower' with p = .026. Arguably more accurate. Injected error is not actually an error."}
+{"id": "pmc-0151", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'By 3 months' became 'Overall' but the numbers are 3-month values. Agent miss."}

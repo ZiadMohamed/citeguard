@@ -14,9 +14,11 @@ Outputs (under data/pmc/):
   papers.jsonl          per paper: id, title, tables[] (the searchable "report" side)
   corpus.jsonl          one SourceDoc per table: {id, title, text}
   items.jsonl           all benchmark items (~300)
-  items_sample.jsonl    balanced 100-item sample (50 good, 10 per error type)
+  items_sample.jsonl    balanced 100-item sample (50 good, 50 spread across error types)
+  rewrites.json         cache of LLM rewrites so reruns are reproducible
 """
 
+import difflib
 import json
 import os
 import random
@@ -33,11 +35,14 @@ SEED = 7
 N_PAPERS = 30
 MAX_CLAIMS_PER_PAPER = 12
 MIN_CLAIMS_PER_PAPER = 5
-MUTATION_TYPES = ["value_mismatch", "wrong_location", "nonexistent_target", "wrong_study", "overstated"]
+MUTATION_TYPES = [
+    "value_mismatch", "wrong_location", "nonexistent_target", "wrong_study", "overstated", "overstated_subtle",
+]
 LABEL_FOR = {
     "SUPPORTED": "supported",
     "value_mismatch": "not_supported",
     "overstated": "not_supported",
+    "overstated_subtle": "not_supported",
     "wrong_location": "wrong_target",
     "nonexistent_target": "wrong_target",
     "wrong_study": "wrong_target",
@@ -53,6 +58,9 @@ SEARCH_QUERY = (
 
 
 def search_candidates(n_pages: int = 3) -> list[str]:
+    cache = RAW / "candidates.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
     ids: list[str] = []
     cursor = "*"
     for _ in range(n_pages):
@@ -62,6 +70,7 @@ def search_candidates(n_pages: int = 3) -> list[str]:
         data = json.loads(urllib.request.urlopen(f"https://www.ebi.ac.uk/europepmc/webservices/rest/search?{qs}").read())
         ids += [r["pmcid"] for r in data["resultList"]["result"] if r.get("pmcid")]
         cursor = data.get("nextCursorMark", cursor)
+    cache.write_text(json.dumps(ids))
     return ids
 
 
@@ -268,14 +277,42 @@ def coverage_in(nums: list[str], table_nums: set[str]) -> float:
     return sum(n in table_nums for n in nums) / len(nums)
 
 
-def rewrite_overstated(claim: str) -> str | None:
-    prompt = f"""Rewrite this sentence from a clinical trial results section so that it OVERSTATES the finding in a way a careful FDA reviewer would reject, while keeping every number exactly as written.
+REWRITE_PROMPTS = {
+    "overstated": """Rewrite this sentence from a clinical trial results section so that it OVERSTATES the finding in a way a careful FDA reviewer would reject, while keeping every number exactly as written.
 
 Use one or two of: remove hedges or qualifiers, claim statistical significance or superiority that isn't stated, generalize to a broader population, turn an association into causation, or strengthen verbs ("reduced" -> "eliminated", "some" -> "all").
 
-Return only the rewritten sentence.
+Return only the rewritten sentence.""",
+    "overstated_subtle": """Make exactly ONE small edit to this sentence from a clinical trial results section so that it claims slightly more than the data supports: the kind of slip a busy medical writer makes and a careful FDA reviewer would catch.
 
-Sentence: {claim}"""
+Pick one: drop a hedge or qualifier ("may", "trend toward", "in the subgroup", "at 6 months"), change association to causation ("was associated with" -> "led to"), generalize from a subgroup or timepoint to everyone or always, or describe a non-significant difference as a real difference.
+
+Keep every number and the rest of the wording identical. Do not use emphatic words like "conclusively", "definitively", "clearly", or "all patients".
+
+Return only the edited sentence.""",
+}
+REWRITE_CACHE = OUT / "rewrites.json"
+_rewrite_cache: dict[str, str | None] | None = None
+
+
+def rewrite_overstated(claim: str, style: str) -> str | None:
+    global _rewrite_cache
+    if _rewrite_cache is None:
+        _rewrite_cache = json.loads(REWRITE_CACHE.read_text()) if REWRITE_CACHE.exists() else {}
+    key = f"{style}::{claim}"
+    if key not in _rewrite_cache:
+        _rewrite_cache[key] = call_rewrite(claim, style)
+        REWRITE_CACHE.write_text(json.dumps(_rewrite_cache, indent=1))
+    text = _rewrite_cache[key]
+    if not text or text == claim or sorted(informative_numbers(text)) != sorted(informative_numbers(claim)):
+        return None
+    if style == "overstated_subtle" and difflib.SequenceMatcher(None, claim, text).ratio() < 0.85:
+        return None
+    return text
+
+
+def call_rewrite(claim: str, style: str) -> str | None:
+    prompt = f"{REWRITE_PROMPTS[style]}\n\nSentence: {claim}"
     body = json.dumps({
         "model": REWRITE_MODEL,
         "messages": [{"role": "user", "content": prompt}],
@@ -289,13 +326,10 @@ Sentence: {claim}"""
     )
     try:
         out = json.loads(urllib.request.urlopen(req, timeout=120).read())
-        text = out["choices"][0]["message"]["content"].strip().strip('"')
+        return out["choices"][0]["message"]["content"].strip().strip('"')
     except Exception as e:
         print(f"  rewrite failed: {e}")
         return None
-    if sorted(informative_numbers(text)) != sorted(informative_numbers(claim)) or text == claim:
-        return None
-    return text
 
 
 def mutate(item: dict, kind: str, paper: dict, papers: dict, rng: random.Random) -> dict | None:
@@ -346,12 +380,12 @@ def mutate(item: dict, kind: str, paper: dict, papers: dict, rng: random.Random)
         m["mutation"] = f"{paper['id']} -> {m['paper']}"
         return m
 
-    if kind == "overstated":
-        text = rewrite_overstated(item["claim"])
+    if kind in ("overstated", "overstated_subtle"):
+        text = rewrite_overstated(item["claim"], kind)
         if not text:
             return None
         m["claim"] = text
-        m["mutation"] = "overstated rewrite"
+        m["mutation"] = f"{kind} rewrite"
         return m
 
     raise ValueError(kind)
@@ -448,8 +482,13 @@ def main() -> None:
     write_jsonl(OUT / "items.jsonl", out_items)
 
     sample = [i for i in out_items if i["errorType"] == "SUPPORTED"][:50]
-    for kind in MUTATION_TYPES:
-        sample += [i for i in out_items if i["errorType"] == kind][:10]
+    pools = {k: [i for i in out_items if i["errorType"] == k] for k in MUTATION_TYPES}
+    bad: list[dict] = []
+    while len(bad) < 50 and any(pools.values()):
+        for k in MUTATION_TYPES:
+            if pools[k] and len(bad) < 50:
+                bad.append(pools[k].pop(0))
+    sample += bad
     rng.shuffle(sample)
     write_jsonl(OUT / "items_sample.jsonl", sample)
 

@@ -6,7 +6,7 @@ import { ZERO_USAGE } from "../llm.js";
 import { isQuoteGrounded } from "../quote.js";
 import type { BenchItem, RunRecord } from "../types.js";
 import { loadDataset, type Dataset } from "./datasets.js";
-import { formatSummary, summarize } from "./metrics.js";
+import { buildReport, formatReport } from "./report.js";
 
 try {
   process.loadEnvFile(join(import.meta.dirname, "..", "..", ".env"));
@@ -75,9 +75,12 @@ async function main() {
     if (done % 10 === 0 || done === items.length) process.stdout.write(`  ${done}/${items.length}\n`);
   });
 
-  const summary = summarize(records);
-  writeFileSync(join(runsDir, `${runName}.summary.json`), JSON.stringify({ model, agent: agentName, dataset: args.dataset, split: args.split, ...summary }, null, 2));
-  console.log(`\n${formatSummary(summary)}\n\nrecords: ${recordsPath}`);
+  const report = buildReport(records, args.dataset!);
+  writeFileSync(
+    join(runsDir, `${runName}.summary.json`),
+    JSON.stringify({ model, agent: agentName, dataset: args.dataset, split: args.split, ...report }, null, 2),
+  );
+  console.log(`\n${formatReport(report)}\n\nrecords: ${recordsPath}`);
   const errors = records.filter((r) => r.error).slice(0, 3);
   for (const e of errors) console.log(`  error sample: ${e.error}`);
 }

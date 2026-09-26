@@ -1,0 +1,1052 @@
+[
+  {
+    "paper": "PMC12883637",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 37,
+    "numberRecall": 1.0,
+    "xmlRows": 8,
+    "pdfRows": 35
+  },
+  {
+    "paper": "PMC12883637",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 77,
+    "numberRecall": 1.0,
+    "xmlRows": 26,
+    "pdfRows": 82
+  },
+  {
+    "paper": "PMC12883637",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 11,
+    "numberRecall": 1.0,
+    "xmlRows": 4,
+    "pdfRows": 14
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 93,
+    "numberRecall": 1.0,
+    "xmlRows": 28,
+    "pdfRows": 36
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 20,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 20
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 19,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 31
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 20,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 32
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 11,
+    "numberRecall": 1.0,
+    "xmlRows": 4,
+    "pdfRows": 5
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 6",
+    "found": true,
+    "numbers": 10,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 6
+  },
+  {
+    "paper": "PMC12702983",
+    "table": "Table 7",
+    "found": true,
+    "numbers": 8,
+    "numberRecall": 1.0,
+    "xmlRows": 4,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12702156",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 29,
+    "numberRecall": 1.0,
+    "xmlRows": 7,
+    "pdfRows": 31
+  },
+  {
+    "paper": "PMC12702156",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 6,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 22
+  },
+  {
+    "paper": "PMC12702156",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 34,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 5
+  },
+  {
+    "paper": "PMC12729797",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 75,
+    "numberRecall": 1.0,
+    "xmlRows": 21,
+    "pdfRows": 41
+  },
+  {
+    "paper": "PMC12729797",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 56,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 11
+  },
+  {
+    "paper": "PMC12729797",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 114,
+    "numberRecall": 0.7368421052631579,
+    "xmlRows": 34,
+    "pdfRows": 85
+  },
+  {
+    "paper": "PMC12729797",
+    "table": "Table 4",
+    "found": false,
+    "numbers": 18,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12689838",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 54,
+    "numberRecall": 0.9629629629629629,
+    "xmlRows": 13,
+    "pdfRows": 18
+  },
+  {
+    "paper": "PMC12689838",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 16,
+    "numberRecall": 1.0,
+    "xmlRows": 2,
+    "pdfRows": 6
+  },
+  {
+    "paper": "PMC12689838",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 67,
+    "numberRecall": 0.9701492537313433,
+    "xmlRows": 12,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12689838",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 52,
+    "numberRecall": 1.0,
+    "xmlRows": 12,
+    "pdfRows": 16
+  },
+  {
+    "paper": "PMC12689838",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 124,
+    "numberRecall": 0.8467741935483871,
+    "xmlRows": 27,
+    "pdfRows": 45
+  },
+  {
+    "paper": "PMC12844567",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 1,
+    "numberRecall": 1.0,
+    "xmlRows": 17,
+    "pdfRows": 69
+  },
+  {
+    "paper": "PMC12844567",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 65,
+    "numberRecall": 1.0,
+    "xmlRows": 31,
+    "pdfRows": 54
+  },
+  {
+    "paper": "PMC12844567",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 31,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 45
+  },
+  {
+    "paper": "PMC12853616",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 66,
+    "numberRecall": 1.0,
+    "xmlRows": 19,
+    "pdfRows": 55
+  },
+  {
+    "paper": "PMC12853616",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 14,
+    "numberRecall": 1.0,
+    "xmlRows": 20,
+    "pdfRows": 95
+  },
+  {
+    "paper": "PMC12853616",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 157,
+    "numberRecall": 0.9554140127388535,
+    "xmlRows": 45,
+    "pdfRows": 67
+  },
+  {
+    "paper": "PMC12712693",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 55,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 14
+  },
+  {
+    "paper": "PMC12712693",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 182,
+    "numberRecall": 1.0,
+    "xmlRows": 17,
+    "pdfRows": 36
+  },
+  {
+    "paper": "PMC12712693",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 51,
+    "numberRecall": 1.0,
+    "xmlRows": 12,
+    "pdfRows": 22
+  },
+  {
+    "paper": "PMC12712693",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 54,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 26
+  },
+  {
+    "paper": "PMC12712693",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 73,
+    "numberRecall": 1.0,
+    "xmlRows": 21,
+    "pdfRows": 22
+  },
+  {
+    "paper": "PMC12685433",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 19,
+    "numberRecall": 1.0,
+    "xmlRows": 11,
+    "pdfRows": 25
+  },
+  {
+    "paper": "PMC12685433",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 36,
+    "numberRecall": 1.0,
+    "xmlRows": 13,
+    "pdfRows": 54
+  },
+  {
+    "paper": "PMC12685433",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 14,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 70
+  },
+  {
+    "paper": "PMC12685433",
+    "table": "Table 4",
+    "found": false,
+    "numbers": 40,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12685433",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 35,
+    "numberRecall": 1.0,
+    "xmlRows": 8,
+    "pdfRows": 54
+  },
+  {
+    "paper": "PMC12723911",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 124,
+    "numberRecall": 1.0,
+    "xmlRows": 43,
+    "pdfRows": 74
+  },
+  {
+    "paper": "PMC12723911",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 85,
+    "numberRecall": 1.0,
+    "xmlRows": 41,
+    "pdfRows": 85
+  },
+  {
+    "paper": "PMC12723911",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 65,
+    "numberRecall": 1.0,
+    "xmlRows": 33,
+    "pdfRows": 97
+  },
+  {
+    "paper": "PMC12723911",
+    "table": "Table 4",
+    "found": false,
+    "numbers": 9,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12723911",
+    "table": "Table 5",
+    "found": false,
+    "numbers": 31,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12677873",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 65,
+    "numberRecall": 0.3076923076923077,
+    "xmlRows": 35,
+    "pdfRows": 16
+  },
+  {
+    "paper": "PMC12677873",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 181,
+    "numberRecall": 0.16574585635359115,
+    "xmlRows": 62,
+    "pdfRows": 13
+  },
+  {
+    "paper": "PMC12677873",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 0,
+    "numberRecall": 1.0,
+    "xmlRows": 6,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12665258",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 23,
+    "numberRecall": 1.0,
+    "xmlRows": 28,
+    "pdfRows": 64
+  },
+  {
+    "paper": "PMC12665258",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 138,
+    "numberRecall": 1.0,
+    "xmlRows": 25,
+    "pdfRows": 64
+  },
+  {
+    "paper": "PMC12665258",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 67,
+    "numberRecall": 1.0,
+    "xmlRows": 12,
+    "pdfRows": 19
+  },
+  {
+    "paper": "PMC12665258",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 18,
+    "numberRecall": 1.0,
+    "xmlRows": 18,
+    "pdfRows": 30
+  },
+  {
+    "paper": "PMC12665258",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 15,
+    "numberRecall": 1.0,
+    "xmlRows": 17,
+    "pdfRows": 73
+  },
+  {
+    "paper": "PMC12699285",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 166,
+    "numberRecall": 1.0,
+    "xmlRows": 35,
+    "pdfRows": 53
+  },
+  {
+    "paper": "PMC12699285",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 15,
+    "numberRecall": 1.0,
+    "xmlRows": 7,
+    "pdfRows": 18
+  },
+  {
+    "paper": "PMC12699285",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 34,
+    "numberRecall": 1.0,
+    "xmlRows": 10,
+    "pdfRows": 13
+  },
+  {
+    "paper": "PMC12750069",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 88,
+    "numberRecall": 1.0,
+    "xmlRows": 18,
+    "pdfRows": 65
+  },
+  {
+    "paper": "PMC12750069",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 16,
+    "numberRecall": 1.0,
+    "xmlRows": 4,
+    "pdfRows": 18
+  },
+  {
+    "paper": "PMC12750069",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 15,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 39
+  },
+  {
+    "paper": "PMC12750069",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 51,
+    "numberRecall": 1.0,
+    "xmlRows": 21,
+    "pdfRows": 56
+  },
+  {
+    "paper": "PMC12750069",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 30,
+    "numberRecall": 1.0,
+    "xmlRows": 13,
+    "pdfRows": 76
+  },
+  {
+    "paper": "PMC12832841",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 0,
+    "numberRecall": 1.0,
+    "xmlRows": 10,
+    "pdfRows": 70
+  },
+  {
+    "paper": "PMC12832841",
+    "table": "Table 2",
+    "found": false,
+    "numbers": 13,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12832841",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 15,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 9
+  },
+  {
+    "paper": "PMC12832841",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 28,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 17
+  },
+  {
+    "paper": "PMC12832841",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 15,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 10
+  },
+  {
+    "paper": "PMC12618765",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 113,
+    "numberRecall": 0.9734513274336283,
+    "xmlRows": 25,
+    "pdfRows": 25
+  },
+  {
+    "paper": "PMC12618765",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 48,
+    "numberRecall": 1.0,
+    "xmlRows": 18,
+    "pdfRows": 28
+  },
+  {
+    "paper": "PMC12618765",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 59,
+    "numberRecall": 1.0,
+    "xmlRows": 20,
+    "pdfRows": 48
+  },
+  {
+    "paper": "PMC12866133",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 6,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 11
+  },
+  {
+    "paper": "PMC12866133",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 31,
+    "numberRecall": 1.0,
+    "xmlRows": 8,
+    "pdfRows": 14
+  },
+  {
+    "paper": "PMC12866133",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 118,
+    "numberRecall": 1.0,
+    "xmlRows": 24,
+    "pdfRows": 38
+  },
+  {
+    "paper": "PMC12866133",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 152,
+    "numberRecall": 1.0,
+    "xmlRows": 33,
+    "pdfRows": 66
+  },
+  {
+    "paper": "PMC12699659",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 35,
+    "numberRecall": 1.0,
+    "xmlRows": 9,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12699659",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 18,
+    "numberRecall": 1.0,
+    "xmlRows": 7,
+    "pdfRows": 61
+  },
+  {
+    "paper": "PMC12699659",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 16,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 10
+  },
+  {
+    "paper": "PMC12647125",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 0,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 2
+  },
+  {
+    "paper": "PMC12647125",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 50,
+    "numberRecall": 0.02,
+    "xmlRows": 27,
+    "pdfRows": 1
+  },
+  {
+    "paper": "PMC12647125",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 178,
+    "numberRecall": 0.016853932584269662,
+    "xmlRows": 16,
+    "pdfRows": 39
+  },
+  {
+    "paper": "PMC12730758",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 34,
+    "numberRecall": 1.0,
+    "xmlRows": 26,
+    "pdfRows": 72
+  },
+  {
+    "paper": "PMC12730758",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 64,
+    "numberRecall": 1.0,
+    "xmlRows": 31,
+    "pdfRows": 93
+  },
+  {
+    "paper": "PMC12730758",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 60,
+    "numberRecall": 1.0,
+    "xmlRows": 29,
+    "pdfRows": 79
+  },
+  {
+    "paper": "PMC12817497",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 32,
+    "numberRecall": 1.0,
+    "xmlRows": 25,
+    "pdfRows": 60
+  },
+  {
+    "paper": "PMC12817497",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 31,
+    "numberRecall": 0.8709677419354839,
+    "xmlRows": 4,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12817497",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 125,
+    "numberRecall": 0.672,
+    "xmlRows": 16,
+    "pdfRows": 32
+  },
+  {
+    "paper": "PMC12817497",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 20,
+    "numberRecall": 1.0,
+    "xmlRows": 7,
+    "pdfRows": 16
+  },
+  {
+    "paper": "PMC12817497",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 44,
+    "numberRecall": 1.0,
+    "xmlRows": 14,
+    "pdfRows": 52
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 108,
+    "numberRecall": 1.0,
+    "xmlRows": 22,
+    "pdfRows": 23
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 220,
+    "numberRecall": 1.0,
+    "xmlRows": 33,
+    "pdfRows": 36
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 157,
+    "numberRecall": 1.0,
+    "xmlRows": 23,
+    "pdfRows": 25
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 241,
+    "numberRecall": 1.0,
+    "xmlRows": 31,
+    "pdfRows": 33
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 5",
+    "found": true,
+    "numbers": 110,
+    "numberRecall": 1.0,
+    "xmlRows": 15,
+    "pdfRows": 16
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 6",
+    "found": true,
+    "numbers": 121,
+    "numberRecall": 1.0,
+    "xmlRows": 15,
+    "pdfRows": 27
+  },
+  {
+    "paper": "PMC12660762",
+    "table": "Table 7",
+    "found": true,
+    "numbers": 164,
+    "numberRecall": 1.0,
+    "xmlRows": 27,
+    "pdfRows": 38
+  },
+  {
+    "paper": "PMC12799658",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 67,
+    "numberRecall": 0.40298507462686567,
+    "xmlRows": 26,
+    "pdfRows": 30
+  },
+  {
+    "paper": "PMC12799658",
+    "table": "Table 2",
+    "found": false,
+    "numbers": 20,
+    "numberRecall": 0.0
+  },
+  {
+    "paper": "PMC12799658",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 71,
+    "numberRecall": 1.0,
+    "xmlRows": 21,
+    "pdfRows": 66
+  },
+  {
+    "paper": "PMC12799658",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 76,
+    "numberRecall": 1.0,
+    "xmlRows": 21,
+    "pdfRows": 72
+  },
+  {
+    "paper": "PMC12701592",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 154,
+    "numberRecall": 1.0,
+    "xmlRows": 41,
+    "pdfRows": 62
+  },
+  {
+    "paper": "PMC12701592",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 192,
+    "numberRecall": 0.9895833333333334,
+    "xmlRows": 19,
+    "pdfRows": 68
+  },
+  {
+    "paper": "PMC12701592",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 33,
+    "numberRecall": 0.9393939393939394,
+    "xmlRows": 7,
+    "pdfRows": 12
+  },
+  {
+    "paper": "PMC12662812",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 0,
+    "numberRecall": 1.0,
+    "xmlRows": 7,
+    "pdfRows": 126
+  },
+  {
+    "paper": "PMC12662812",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 78,
+    "numberRecall": 1.0,
+    "xmlRows": 37,
+    "pdfRows": 67
+  },
+  {
+    "paper": "PMC12662812",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 238,
+    "numberRecall": 0.9957983193277311,
+    "xmlRows": 51,
+    "pdfRows": 89
+  },
+  {
+    "paper": "PMC12690284",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 27,
+    "numberRecall": 1.0,
+    "xmlRows": 16,
+    "pdfRows": 28
+  },
+  {
+    "paper": "PMC12690284",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 16,
+    "numberRecall": 1.0,
+    "xmlRows": 23,
+    "pdfRows": 49
+  },
+  {
+    "paper": "PMC12690284",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 19,
+    "numberRecall": 1.0,
+    "xmlRows": 17,
+    "pdfRows": 80
+  },
+  {
+    "paper": "PMC12690956",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 54,
+    "numberRecall": 1.0,
+    "xmlRows": 29,
+    "pdfRows": 70
+  },
+  {
+    "paper": "PMC12690956",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 45,
+    "numberRecall": 0.8444444444444444,
+    "xmlRows": 5,
+    "pdfRows": 10
+  },
+  {
+    "paper": "PMC12690956",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 68,
+    "numberRecall": 1.0,
+    "xmlRows": 5,
+    "pdfRows": 13
+  },
+  {
+    "paper": "PMC12765954",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 4,
+    "numberRecall": 0.25,
+    "xmlRows": 11,
+    "pdfRows": 59
+  },
+  {
+    "paper": "PMC12765954",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 57,
+    "numberRecall": 1.0,
+    "xmlRows": 47,
+    "pdfRows": 80
+  },
+  {
+    "paper": "PMC12765954",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 171,
+    "numberRecall": 1.0,
+    "xmlRows": 18,
+    "pdfRows": 58
+  },
+  {
+    "paper": "PMC12515046",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 3,
+    "numberRecall": 0.6666666666666666,
+    "xmlRows": 15,
+    "pdfRows": 55
+  },
+  {
+    "paper": "PMC12515046",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 51,
+    "numberRecall": 1.0,
+    "xmlRows": 12,
+    "pdfRows": 82
+  },
+  {
+    "paper": "PMC12515046",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 173,
+    "numberRecall": 1.0,
+    "xmlRows": 34,
+    "pdfRows": 52
+  },
+  {
+    "paper": "PMC12710246",
+    "table": "Table 1",
+    "found": true,
+    "numbers": 69,
+    "numberRecall": 0.927536231884058,
+    "xmlRows": 17,
+    "pdfRows": 24
+  },
+  {
+    "paper": "PMC12710246",
+    "table": "Table 2",
+    "found": true,
+    "numbers": 70,
+    "numberRecall": 1.0,
+    "xmlRows": 24,
+    "pdfRows": 42
+  },
+  {
+    "paper": "PMC12710246",
+    "table": "Table 3",
+    "found": true,
+    "numbers": 92,
+    "numberRecall": 0.9130434782608695,
+    "xmlRows": 27,
+    "pdfRows": 54
+  },
+  {
+    "paper": "PMC12710246",
+    "table": "Table 4",
+    "found": true,
+    "numbers": 43,
+    "numberRecall": 0.5348837209302325,
+    "xmlRows": 14,
+    "pdfRows": 15
+  }
+]

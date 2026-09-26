@@ -1,0 +1,363 @@
+{
+  "model": "google/gemini-3.8-flash",
+  "agent": "tool-full-r2",
+  "dataset": "pmc",
+  "split": "sample",
+  "raw": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.9,
+      "n": 50,
+      "ci": [
+        0.7863950966521162,
+        0.956524876008429
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.22,
+      "n": 50,
+      "ci": [
+        0.12753786224302288,
+        0.35241815689459555
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.8035714285714286,
+      "n": 56,
+      "ci": [
+        0.6815514267252283,
+        0.8866151998355589
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.83,
+      "n": 100,
+      "ci": [
+        0.7445181876635703,
+        0.8910652394022684
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 82,
+      "ci": [
+        0.9552478052599207,
+        1
+      ]
+    },
+    "flaggedByType": {
+      "nonexistent_target": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "overstated": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "overstated_subtle": {
+        "value": 0.375,
+        "n": 8,
+        "ci": [
+          0.13684175946152105,
+          0.6942621454161981
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.22,
+        "n": 50,
+        "ci": [
+          0.12753786224302288,
+          0.35241815689459555
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_location": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_study": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 39,
+        "not_supported": 11,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 5,
+        "not_supported": 20,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 1,
+        "wrong_target": 24
+      }
+    },
+    "costPerCheckUsd": 0.027620064750000003,
+    "totalCostUsd": 2.762006475,
+    "latencyMs": {
+      "p50": 25996,
+      "p95": 212304
+    },
+    "avgPromptTokens": 26435.93,
+    "locationSuggestion": {
+      "value": 0.92,
+      "n": 25,
+      "ci": [
+        0.7503348787704218,
+        0.977780066308908
+      ]
+    },
+    "agent": {
+      "avgToolCalls": 6.3,
+      "p95ToolCalls": 21,
+      "maxToolCalls": 36,
+      "budgetExhausted": 2,
+      "avgPeakPromptTokens": 4710.1,
+      "maxPeakPromptTokens": 12700,
+      "toolUse": {
+        "read_section": 1.8800000000000014,
+        "search": 3.5399999999999685,
+        "get_outline": 0.7500000000000004,
+        "list_documents": 0.02
+      },
+      "retried": 7,
+      "unresolved": 2,
+      "retryFlips": {
+        "flagToPass": 3,
+        "passToFlag": 0
+      },
+      "failures": {
+        "budget_exhausted": 13
+      }
+    }
+  },
+  "adjusted": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.9298245614035088,
+      "n": 57,
+      "ci": [
+        0.8329959829878215,
+        0.9723740270053409
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.06976744186046512,
+      "n": 43,
+      "ci": [
+        0.024011153791962503,
+        0.18609268553034927
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.9464285714285714,
+      "n": 56,
+      "ci": [
+        0.8539246046357077,
+        0.9816145520713321
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.92,
+      "n": 100,
+      "ci": [
+        0.8500173312059693,
+        0.9589070305141891
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 82,
+      "ci": [
+        0.9552478052599207,
+        1
+      ]
+    },
+    "flaggedByType": {
+      "author_error": {
+        "value": 0.8333333333333334,
+        "n": 6,
+        "ci": [
+          0.43649056343635395,
+          0.9699474141282697
+        ]
+      },
+      "nonexistent_target": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "not_an_error": {
+        "value": 0,
+        "n": 2,
+        "ci": [
+          0,
+          0.6576280471103807
+        ]
+      },
+      "not_in_source": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "overstated": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "overstated_subtle": {
+        "value": 0.5,
+        "n": 6,
+        "ci": [
+          0.18761280689940868,
+          0.8123871931005913
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.07317073170731707,
+        "n": 41,
+        "ci": [
+          0.025197373252564145,
+          0.19427740017211292
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_location": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_study": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 40,
+        "not_supported": 3,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 4,
+        "not_supported": 28,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 1,
+        "wrong_target": 24
+      }
+    },
+    "costPerCheckUsd": 0.027620064750000003,
+    "totalCostUsd": 2.762006475,
+    "latencyMs": {
+      "p50": 25996,
+      "p95": 212304
+    },
+    "avgPromptTokens": 26435.93,
+    "locationSuggestion": {
+      "value": 0.92,
+      "n": 25,
+      "ci": [
+        0.7503348787704218,
+        0.977780066308908
+      ]
+    },
+    "agent": {
+      "avgToolCalls": 6.3,
+      "p95ToolCalls": 21,
+      "maxToolCalls": 36,
+      "budgetExhausted": 2,
+      "avgPeakPromptTokens": 4710.1,
+      "maxPeakPromptTokens": 12700,
+      "toolUse": {
+        "read_section": 1.8800000000000014,
+        "search": 3.5399999999999685,
+        "get_outline": 0.7500000000000004,
+        "list_documents": 0.02
+      },
+      "retried": 7,
+      "unresolved": 2,
+      "retryFlips": {
+        "flagToPass": 3,
+        "passToFlag": 0
+      },
+      "failures": {
+        "budget_exhausted": 13
+      }
+    },
+    "overridesApplied": 11
+  },
+  "firstAttempt": {
+    "catchRate": {
+      "value": 0.9473684210526315,
+      "n": 57,
+      "ci": [
+        0.8563022233952869,
+        0.9819400319037189
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.11627906976744186,
+      "n": 43,
+      "ci": [
+        0.050703529948620846,
+        0.24479448890641395
+      ]
+    }
+  }
+}

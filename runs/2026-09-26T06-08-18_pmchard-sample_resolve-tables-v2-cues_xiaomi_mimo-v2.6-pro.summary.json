@@ -1,0 +1,116 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "agent": "resolve-tables-v2-cues",
+  "dataset": "pmchard",
+  "split": "sample",
+  "raw": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.96,
+      "n": 50,
+      "ci": [
+        0.8653966212204534,
+        0.9889613473391734
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.16,
+      "n": 50,
+      "ci": [
+        0.08337321362087696,
+        0.2851448096176598
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.8571428571428571,
+      "n": 56,
+      "ci": [
+        0.7426383257914846,
+        0.9257929995741472
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.9,
+      "n": 100,
+      "ci": [
+        0.8256326956323347,
+        0.9447714583868639
+      ]
+    },
+    "quoteGrounded": {
+      "value": 0.98,
+      "n": 100,
+      "ci": [
+        0.9299868370580063,
+        0.9944981477650318
+      ]
+    },
+    "flaggedByType": {
+      "direction_flip": {
+        "value": 0.9333333333333333,
+        "n": 15,
+        "ci": [
+          0.7018292244757601,
+          0.9881334113938051
+        ]
+      },
+      "significance_flip": {
+        "value": 1,
+        "n": 11,
+        "ci": [
+          0.7411599827511859,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.16,
+        "n": 50,
+        "ci": [
+          0.08337321362087696,
+          0.2851448096176598
+        ]
+      },
+      "swap_values": {
+        "value": 0.9523809523809523,
+        "n": 21,
+        "ci": [
+          0.7733018341376452,
+          0.9915442305280766
+        ]
+      },
+      "timepoint_swap": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 42,
+        "not_supported": 8,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 2,
+        "not_supported": 48,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 0,
+        "wrong_target": 0
+      }
+    },
+    "costPerCheckUsd": 0.00098622764,
+    "totalCostUsd": 0.09862276399999999,
+    "latencyMs": {
+      "p50": 12698,
+      "p95": 36016
+    },
+    "avgPromptTokens": 1447
+  }
+}

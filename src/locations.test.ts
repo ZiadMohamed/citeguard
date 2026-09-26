@@ -1,0 +1,44 @@
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import type { BenchItem } from "./types.js";
+import { parseLocation, sameLocation, tablesIn, trueLocation } from "./locations.js";
+
+const item = (citation: string, mutation: string | null, sourcePaper = "PMC1"): BenchItem => ({
+  id: "x", dataset: "pmc", claim: "", citation, targetId: null, label: "wrong_target",
+  errorType: "", sourcePaper, mutation,
+});
+
+describe("trueLocation", () => {
+  it("recovers the original table for moved, nonexistent and wrong-study citations", () => {
+    assert.deepEqual(trueLocation(item("PMC1, Table 2", "Table 1 -> Table 2")), { doc: "PMC1", table: "1" });
+    assert.deepEqual(trueLocation(item("PMC1, Table 7", "Table 3 -> Table 7 (does not exist)")), { doc: "PMC1", table: "3" });
+    assert.deepEqual(trueLocation(item("PMC2, Table 2", "PMC1 -> PMC2")), { doc: "PMC1", table: "2" });
+  });
+
+  it("is document-level for report-cites-report citations", () => {
+    assert.deepEqual(trueLocation(item("Smith et al. 2020 (PMC2)", "PMC1 -> PMC2")), { doc: "PMC1", table: null });
+  });
+});
+
+describe("parseLocation / sameLocation", () => {
+  it("normalizes free text and falls back to the cited document", () => {
+    assert.deepEqual(parseLocation("Table 3 of pmc55", "PMC1"), { doc: "PMC55", table: "3" });
+    assert.deepEqual(parseLocation("Table 3", "PMC1"), { doc: "PMC1", table: "3" });
+    assert.equal(parseLocation("", "PMC1"), null);
+    assert.equal(parseLocation(null, "PMC1"), null);
+  });
+
+  it("keeps dotted and supplementary table ids, and lists every table named", () => {
+    assert.deepEqual(parseLocation("CSR-ABC101, Table 14.2.1", null), { doc: "CSR-ABC101", table: "14.2.1" });
+    assert.deepEqual(parseLocation("PMC1, Supplementary Table S1", null), { doc: "PMC1", table: "S1" });
+    assert.deepEqual(parseLocation("PMC1, Figure 2", null), { doc: "PMC1", table: null, section: "Figure 2" });
+    assert.deepEqual(tablesIn("Tables 14.2.1 and 14.2.2"), ["14.2.1", "14.2.2"]);
+    assert.deepEqual(tablesIn("Tables 2-4"), ["2", "3", "4"]);
+  });
+
+  it("only compares tables when the target names one", () => {
+    assert.equal(sameLocation({ doc: "PMC1", table: "3" }, { doc: "PMC1", table: null }), true);
+    assert.equal(sameLocation({ doc: "PMC1", table: null }, { doc: "PMC1", table: "3" }), false);
+    assert.equal(sameLocation({ doc: "PMC2", table: "3" }, { doc: "PMC1", table: "3" }), false);
+  });
+});

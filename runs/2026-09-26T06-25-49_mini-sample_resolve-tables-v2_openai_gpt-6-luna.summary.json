@@ -1,0 +1,130 @@
+{
+  "model": "openai/gpt-6-luna",
+  "agent": "resolve-tables-v2",
+  "dataset": "mini",
+  "split": "sample",
+  "raw": {
+    "n": 5,
+    "failed": 0,
+    "catchRate": {
+      "value": 1,
+      "n": 3,
+      "ci": [
+        0.43849391955098227,
+        1
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0,
+      "n": 2,
+      "ci": [
+        0,
+        0.6576280471103807
+      ]
+    },
+    "flagPrecision": {
+      "value": 1,
+      "n": 3,
+      "ci": [
+        0.43849391955098227,
+        1
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.8,
+      "n": 5,
+      "ci": [
+        0.3755282641185388,
+        0.9637768390302125
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 4,
+      "ci": [
+        0.5100999795960008,
+        1
+      ]
+    },
+    "flaggedByType": {
+      "nonexistent_target": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0,
+        "n": 2,
+        "ci": [
+          0,
+          0.6576280471103807
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "wrong_location": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 2,
+        "not_supported": 0,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 0,
+        "not_supported": 1,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 1,
+        "wrong_target": 1
+      }
+    },
+    "costPerCheckUsd": 0.000210485,
+    "totalCostUsd": 0.001052425,
+    "latencyMs": {
+      "p50": 2175,
+      "p95": 7070
+    },
+    "avgPromptTokens": 1423.8,
+    "agent": {
+      "avgToolCalls": 4,
+      "p95ToolCalls": 4,
+      "maxToolCalls": 4,
+      "checksWithTools": 1,
+      "checks": 5,
+      "budgetExhausted": 0,
+      "avgPeakPromptTokens": 1247,
+      "maxPeakPromptTokens": 1247,
+      "toolUse": {
+        "list_documents": 1,
+        "get_outline": 1,
+        "read_section": 2
+      },
+      "retried": 0,
+      "unresolved": 0,
+      "retryFlips": {
+        "flagToPass": 0,
+        "passToFlag": 0
+      },
+      "failures": {}
+    }
+  }
+}

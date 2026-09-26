@@ -1,0 +1,106 @@
+{
+  "model": "openai/gpt-6-luna",
+  "agent": "baseline",
+  "dataset": "scifact",
+  "split": "sample",
+  "n": 100,
+  "failed": 0,
+  "catchRate": {
+    "value": 1,
+    "n": 50,
+    "ci": [
+      0.9286499658256813,
+      1
+    ]
+  },
+  "falseAlarmRate": {
+    "value": 0.56,
+    "n": 50,
+    "ci": [
+      0.4230578680014353,
+      0.6883801278976466
+    ]
+  },
+  "flagPrecision": {
+    "value": 0.6410256410256411,
+    "n": 78,
+    "ci": [
+      0.5302659691423957,
+      0.7385459797931091
+    ]
+  },
+  "verdictAccuracy": {
+    "value": 0.7,
+    "n": 100,
+    "ci": [
+      0.6041496156718804,
+      0.7810524613377188
+    ]
+  },
+  "quoteGrounded": {
+    "value": 0.9642857142857143,
+    "n": 84,
+    "ci": [
+      0.900181415678933,
+      0.9877805522269338
+    ]
+  },
+  "flaggedByType": {
+    "CONTRADICT": {
+      "value": 1,
+      "n": 17,
+      "ci": [
+        0.8156763396284354,
+        1
+      ]
+    },
+    "NOINFO": {
+      "value": 1,
+      "n": 17,
+      "ci": [
+        0.8156763396284354,
+        1
+      ]
+    },
+    "SUPPORT": {
+      "value": 0.56,
+      "n": 50,
+      "ci": [
+        0.4230578680014353,
+        0.6883801278976466
+      ]
+    },
+    "SWAPPED": {
+      "value": 1,
+      "n": 16,
+      "ci": [
+        0.8063865817272802,
+        1
+      ]
+    }
+  },
+  "confusion": {
+    "supported": {
+      "supported": 22,
+      "not_supported": 27,
+      "wrong_target": 1
+    },
+    "not_supported": {
+      "supported": 0,
+      "not_supported": 32,
+      "wrong_target": 2
+    },
+    "wrong_target": {
+      "supported": 0,
+      "not_supported": 0,
+      "wrong_target": 16
+    }
+  },
+  "costPerCheckUsd": 0.00016925549999999995,
+  "totalCostUsd": 0.016925549999999994,
+  "latencyMs": {
+    "p50": 2546,
+    "p95": 4924
+  },
+  "avgPromptTokens": 700.33
+}

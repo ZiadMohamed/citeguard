@@ -1,6 +1,13 @@
 node_modules/
 .env
-data/
-runs/
 __pycache__/
 .venv/
+
+# Raw downloads and large derived stores: rebuild with the pnpm prep:* scripts.
+data/*/raw/
+data/pmc/pdf/
+data/pmcrefs/citing/
+data/pmc/docs_full*.jsonl
+data/pmcrefs/corpus.jsonl
+data/pmcrefs/*.bak.jsonl
+data/scifact/

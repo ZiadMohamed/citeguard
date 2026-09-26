@@ -36,6 +36,49 @@ describe("resolveCitation", () => {
     assert.match(resolveCitation(store, "see appendix").reason, /does not name a document/);
   });
 
+  describe("submission-style citations", () => {
+    const csr = new DocStore([
+      ...docs,
+      {
+        id: "CSR-ABC101",
+        title: "Clinical study report",
+        aliases: ["Study ABC-101"],
+        sections: [
+          { label: "Table 14", heading: "Not this one", kind: "table", text: "x | 1.1" },
+          { label: "Table 14.2.1", heading: "Primary endpoint", kind: "table", text: "HbA1c | -0.8" },
+          { label: "Table 14.2.2", heading: "Secondary", kind: "table", text: "FPG | -1.1" },
+          { label: "Listing 16.2.7", heading: "Adverse events", kind: "text", text: "..." },
+        ],
+      },
+    ]);
+
+    it("recognises report ids written with or without hyphens, and aliases", () => {
+      for (const c of ["CSR-ABC101, Table 14.2.1", "CSR ABC-101 Table 14.2.1", "Study ABC-101, Table 14.2.1"]) {
+        assert.equal(resolveCitation(csr, c).label, "CSR-ABC101, Table 14.2.1", c);
+      }
+    });
+
+    it("never reads Table 14.2.1 as Table 14, or Table 1.4 as Table 14", () => {
+      assert.match(resolveCitation(csr, "CSR-ABC101, Table 14.2.1").text, /HbA1c/);
+      assert.equal(resolveCitation(csr, "CSR-ABC101, Table 1.4").kind, "missing");
+      assert.equal(resolveCitation(csr, "CSR-ABC101, Table 14.2.9").kind, "missing");
+    });
+
+    it("resolves listings, and a list of tables as one source", () => {
+      assert.equal(resolveCitation(csr, "Study ABC-101 CSR, Listing 16.2.7").label, "CSR-ABC101, Listing 16.2.7");
+      const both = resolveCitation(csr, "CSR-ABC101, Tables 14.2.1 and 14.2.2");
+      assert.equal(both.kind, "section");
+      assert.match(both.numberText, /-0\.8[\s\S]*-1\.1/);
+      assert.equal(resolveCitation(csr, "CSR-ABC101, Tables 14.2.1 and 14.2.9").kind, "missing");
+    });
+
+    it("warns when a named figure is missing and the whole document is checked instead", () => {
+      const r = resolveCitation(csr, "CSR-ABC101, Figure 3");
+      assert.equal(r.kind, "document");
+      assert.match(r.warning, /Figure 3 is not in the parsed CSR-ABC101/);
+    });
+  });
+
   it("treats a citation with no table as the whole document", () => {
     const r = resolveCitation(store, "Smith et al. 2020 (PMC1)");
     assert.equal(r.kind, "document");

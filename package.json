@@ -4,12 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check": "tsx src/cli/check.ts",
     "prep:scifact": "uv run python/prep_scifact.py",
     "prep:pmc": "uv run python/prep_pmc.py",
     "prep:refs": "uv run python/prep_refs.py",
+    "prep:hard": "uv run python/prep_hard.py",
     "prep:docs": "uv run python/build_docs.py",
     "bench": "tsx src/bench/run.ts",
     "rescore": "tsx src/bench/rescore.ts",
+    "leaderboard": "tsx src/bench/leaderboard.ts",
+    "extract:eval": "tsx src/bench/extract-eval.ts",
+    "scan": "tsx src/bench/scan.ts",
+    "audit:tables": "tsx src/bench/audit.ts",
+    "fix:eval": "tsx src/bench/fix-eval.ts",
+    "prep:pdf": "uv run python/prep_pdf.py",
     "test": "tsx --test src/*.test.ts src/**/*.test.ts",
     "typecheck": "tsc"
   },
@@ -20,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "jsonrepair": "^3.15.0",
     "minisearch": "^7.2.0",
     "zod": "^4.6.5"
   },

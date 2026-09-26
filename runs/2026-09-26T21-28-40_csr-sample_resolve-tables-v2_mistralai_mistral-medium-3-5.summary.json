@@ -1,0 +1,172 @@
+{
+  "model": "mistralai/mistral-medium-3-5",
+  "agent": "resolve-tables-v2",
+  "dataset": "csr",
+  "split": "sample",
+  "raw": {
+    "n": 37,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.9545454545454546,
+      "n": 22,
+      "ci": [
+        0.7820151050048196,
+        0.9919307806988522
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.06666666666666667,
+      "n": 15,
+      "ci": [
+        0.011866588606194856,
+        0.2981707755242399
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.9545454545454546,
+      "n": 22,
+      "ci": [
+        0.7820151050048196,
+        0.9919307806988522
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.9459459459459459,
+      "n": 37,
+      "ci": [
+        0.822950349364601,
+        0.9850493372294601
+      ]
+    },
+    "quoteGrounded": {
+      "value": 0.918918918918919,
+      "n": 37,
+      "ci": [
+        0.7869900750149847,
+        0.9720399336036787
+      ]
+    },
+    "flaggedByType": {
+      "causation": {
+        "value": 0,
+        "n": 1,
+        "ci": [
+          0,
+          0.7934567085261071
+        ]
+      },
+      "comparison_nonsignificant": {
+        "value": 1,
+        "n": 2,
+        "ci": [
+          0.34237195288961925,
+          1
+        ]
+      },
+      "direction_flip": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "magnitude": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "not_in_source": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "population_swap": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "qualitative_safety": {
+        "value": 1,
+        "n": 4,
+        "ci": [
+          0.5100999795960008,
+          1
+        ]
+      },
+      "subgroup_overreach": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.06666666666666667,
+        "n": 15,
+        "ci": [
+          0.011866588606194856,
+          0.2981707755242399
+        ]
+      },
+      "swap_values": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "timepoint_scope": {
+        "value": 1,
+        "n": 2,
+        "ci": [
+          0.34237195288961925,
+          1
+        ]
+      },
+      "timepoint_swap": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 14,
+        "not_supported": 1,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 1,
+        "not_supported": 21,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 0,
+        "wrong_target": 0
+      }
+    },
+    "costPerCheckUsd": 0.0024387972972972974,
+    "totalCostUsd": 0.09023550000000001,
+    "latencyMs": {
+      "p50": 1165,
+      "p95": 1880
+    },
+    "avgPromptTokens": 865.5945945945946
+  }
+}

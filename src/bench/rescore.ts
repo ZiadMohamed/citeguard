@@ -1,3 +1,4 @@
+import "../cli/errors.js";
 import { writeFileSync } from "node:fs";
 import { readJsonl } from "./datasets.js";
 import { buildReport, formatReport } from "./report.js";

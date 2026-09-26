@@ -1,15 +1,17 @@
+import { fail } from "../cli/errors.js";
 import { mkdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { checkBaseline } from "../agents/baseline.js";
-import { checkFastPath } from "../agents/resolver.js";
+import { checkCitation, type CitationCheck, type FastPathOptions } from "../agents/resolver.js";
+import { checkHybrid, ESCALATE_OPTIONS, type Escalate } from "../agents/hybrid.js";
 import { checkWithRetries } from "../agents/tool-agent.js";
 import { ZERO_USAGE } from "../llm.js";
 import { isQuoteGrounded } from "../quote.js";
 import { buildChunks, SearchIndex } from "../tools/search.js";
 import { loadStore, type CorpusVariant } from "../tools/store.js";
 import { ToolBox } from "../tools/tools.js";
-import type { AgentTrace, BenchItem, CheckResult, RunRecord, Usage } from "../types.js";
+import type { BenchItem, RunRecord } from "../types.js";
 import { loadDataset, type Dataset } from "./datasets.js";
 import { buildReport, formatReport } from "./report.js";
 
@@ -25,24 +27,38 @@ const { values: args } = parseArgs({
     model: { type: "string", default: "openai/gpt-6-luna" },
     concurrency: { type: "string", default: "8" },
     limit: { type: "string" },
-    /** Tool agent only: which document store to search. */
+    /** resolve / hybrid / tool: which document store (tables | pdf | full). */
     corpus: { type: "string", default: "tables" },
     /** Tool agent only: fresh-context retries after an objective failure. */
     retries: { type: "string", default: "2" },
+    /** resolve / hybrid: v2 (default) = + reading conventions and confidence; v1 reproduces the first runs. */
+    prompt: { type: "string", default: "v2" },
+    /** OpenRouter reasoning effort for one-call checks (low | medium | high). */
+    reasoning: { type: "string" },
+    /** hybrid: the strong model, and which fast verdicts it re-checks (flags,cues,judgment,lowconf,passes). */
+    strong: { type: "string", default: "openai/gpt-6-sol" },
+    escalate: { type: "string", default: "flags,cues" },
+    /** resolve / hybrid: add sign and overstatement cues to the retry after a "supported" verdict. */
+    cues: { type: "boolean", default: false },
   },
 });
 
-interface AgentOutput {
-  result: CheckResult;
-  usage: Usage;
-  /** Text the quote must be found in. */
-  sourceText: string;
-  trace?: AgentTrace;
+type AgentOutput = Omit<CitationCheck, "resolution"> & {
   resolution?: RunRecord["resolution"];
-}
+  hybrid?: RunRecord["hybrid"];
+};
 type Agent = (item: BenchItem, model: string) => Promise<AgentOutput>;
 
+/** The store, plus a tool box factory that builds the search index only if a check needs it. */
+function storeAndTools() {
+  const store = loadStore(args.dataset!, args.corpus as CorpusVariant);
+  let index: SearchIndex | undefined;
+  const newToolbox = () => new ToolBox(store, (index ??= new SearchIndex(buildChunks(store))));
+  return { store, newToolbox };
+}
+
 const AGENTS: Record<string, (ds: Dataset) => Agent> = {
+  /** Ablation: handed the answer-key text (targetId), one call, no tools. */
   baseline: (ds) => async (item, model) => {
     const source = item.targetId ? (ds.docs.get(item.targetId) ?? null) : null;
     const { result, usage } = await checkBaseline(
@@ -51,37 +67,67 @@ const AGENTS: Record<string, (ds: Dataset) => Agent> = {
     );
     return { result, usage, sourceText: source ? `${source.title}\n${source.text}` : "" };
   },
+  /** Always searches with tools, even when the citation names a table. */
   tool: () => {
-    const store = loadStore(args.dataset!, args.corpus as CorpusVariant);
-    const index = new SearchIndex(buildChunks(store));
-    const retries = Number(args.retries);
-    return (item, model) =>
-      checkWithRetries(
-        { claim: item.claim, citation: item.citation },
-        () => new ToolBox(store, index),
-        store,
-        model,
-        retries,
-      );
+    const { store, newToolbox } = storeAndTools();
+    return (item, model) => checkWithRetries(item, newToolbox, store, model, Number(args.retries));
   },
   /**
    * Resolve a named section in code and make one model call. Search with the tool agent
    * only when the citation names a whole document, or a section too long to paste.
    */
   resolve: () => {
-    const store = loadStore(args.dataset!, args.corpus as CorpusVariant);
-    let index: SearchIndex | undefined;
-    const retries = Number(args.retries);
+    const { store, newToolbox } = storeAndTools();
+    return (item, model) => checkCitation(item, store, newToolbox, model, fastOpts(), Number(args.retries));
+  },
+  /** Fast model first; the strong model (--strong) re-checks the verdicts named in --escalate. */
+  hybrid: () => {
+    const { store, newToolbox } = storeAndTools();
+    const escalate = parseEscalate(args.escalate!);
     return async (item, model) => {
-      const input = { claim: item.claim, citation: item.citation };
-      const fast = await checkFastPath(input, store, model);
-      if (fast) return fast;
-      index ??= new SearchIndex(buildChunks(store));
-      const searched = await checkWithRetries(input, () => new ToolBox(store, index!), store, model, retries);
-      return { ...searched, resolution: "search" as const };
+      const out = await checkHybrid(item, store, newToolbox, {
+        fast: model,
+        strong: args.strong!,
+        escalate,
+        opts: fastOpts(),
+        retries: Number(args.retries),
+      });
+      const { decidedBy, fastResult, fastLatencyMs, escalationReason, ...rest } = out;
+      return { ...rest, hybrid: { decidedBy, fastResult, fastLatencyMs, escalationReason } };
     };
   },
 };
+
+/** Run-name tag for the setup, e.g. "resolve-tables-v2-cues" or "hybrid-v2-cues-flags+cues-gpt-6-sol". */
+function variantName(agent: string): string {
+  const prompt = args.prompt === "v1" ? "" : `-${args.prompt}`;
+  const tags = `${args.reasoning ? `-${args.reasoning}` : ""}${args.cues ? "-cues" : ""}`;
+  switch (agent) {
+    case "tool":
+      return `tool-${args.corpus}-r${args.retries}`;
+    case "resolve":
+      return `resolve-${args.corpus}${prompt}${tags}`;
+    case "hybrid":
+      return `hybrid${prompt || "-v1"}${tags}-${args.escalate!.replace(/,/g, "+")}-${args.strong!.split("/").pop()}`;
+    default:
+      return agent;
+  }
+}
+
+function parseEscalate(list: string): Set<Escalate> {
+  const parts = list.split(",").map((s) => s.trim()).filter(Boolean);
+  const bad = parts.filter((p) => !ESCALATE_OPTIONS.includes(p as Escalate));
+  if (bad.length) throw new Error(`Unknown --escalate ${bad.join(",")}. Options: ${ESCALATE_OPTIONS.join(", ")}`);
+  return new Set(parts as Escalate[]);
+}
+
+function fastOpts(): FastPathOptions {
+  return {
+    readingRules: args.prompt === "v2",
+    reasoning: args.reasoning as FastPathOptions["reasoning"],
+    cues: args.cues,
+  };
+}
 
 async function main() {
   const agentName = args.agent!;
@@ -92,8 +138,7 @@ async function main() {
   const agent = makeAgent(ds);
   const items = args.limit ? ds.items.slice(0, Number(args.limit)) : ds.items;
   const model = args.model!;
-  const variant =
-    agentName === "tool" ? `tool-${args.corpus}-r${args.retries}` : agentName === "resolve" ? `resolve-${args.corpus}` : agentName;
+  const variant = variantName(agentName);
 
   const runsDir = join(import.meta.dirname, "..", "..", "runs");
   mkdirSync(runsDir, { recursive: true });
@@ -109,13 +154,16 @@ async function main() {
     const started = Date.now();
     let record: RunRecord;
     try {
-      const { result, usage, sourceText, trace, resolution } = await agent(item, model);
+      const { result, usage, sourceText, trace, resolution, hybrid, cues, warning } = await agent(item, model);
       record = {
         item, model, agent: variant, result, usage,
         quoteGrounded: result.quote.trim() ? isQuoteGrounded(result.quote, sourceText) : null,
         latencyMs: Date.now() - started,
         ...(trace && { trace }),
         ...(resolution && { resolution }),
+        ...(hybrid && { hybrid }),
+        ...(cues && { cues }),
+        ...(warning && { warning }),
       };
     } catch (err: any) {
       record = {
@@ -136,7 +184,15 @@ async function main() {
     JSON.stringify({ model, agent: variant, dataset: args.dataset, split: args.split, ...report }, null, 2),
   );
   console.log(`\n${formatReport(report)}\n\nrecords: ${recordsPath}`);
-  if (agentName === "resolve") {
+  if (agentName === "hybrid") {
+    const by = { code: 0, fast: 0, strong: 0 };
+    for (const r of records) if (r.hybrid) by[r.hybrid.decidedBy]++;
+    const fastMs = records.flatMap((r) => (r.hybrid ? [r.hybrid.fastLatencyMs] : [])).sort((a, b) => a - b);
+    console.log(
+      `decided by: ${by.code} code, ${by.fast} fast model, ${by.strong} strong model | time to first verdict p50 ${fastMs[Math.floor(fastMs.length / 2)] ?? 0} ms`,
+    );
+  }
+  if (agentName === "resolve" || agentName === "hybrid") {
     const counts = { section: 0, missing: 0, search: 0 };
     for (const r of records) if (r.resolution) counts[r.resolution]++;
     console.log(
@@ -155,7 +211,4 @@ async function pool<T>(items: T[], concurrency: number, fn: (item: T) => Promise
   await Promise.all(workers);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main().catch(fail);

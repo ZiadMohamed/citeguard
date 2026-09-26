@@ -1,0 +1,137 @@
+{
+  "model": "openai/gpt-6-luna",
+  "agent": "tool-full-r2",
+  "dataset": "pmcrefs",
+  "split": "sample",
+  "raw": {
+    "n": 6,
+    "failed": 0,
+    "catchRate": {
+      "value": 1,
+      "n": 3,
+      "ci": [
+        0.43849391955098227,
+        1
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.6666666666666666,
+      "n": 3,
+      "ci": [
+        0.2076549551264879,
+        0.9385096847238394
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.6,
+      "n": 5,
+      "ci": [
+        0.23071993220883708,
+        0.8823817688407467
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.6666666666666666,
+      "n": 6,
+      "ci": [
+        0.29998832134152864,
+        0.9032306674407831
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 6,
+      "ci": [
+        0.6096569663469354,
+        0.9999999999999999
+      ]
+    },
+    "flaggedByType": {
+      "nonexistent_target": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "overstated_subtle": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.6666666666666666,
+        "n": 3,
+        "ci": [
+          0.2076549551264879,
+          0.9385096847238394
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 1,
+        "not_supported": 2,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 0,
+        "not_supported": 2,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 0,
+        "wrong_target": 1
+      }
+    },
+    "costPerCheckUsd": 0.0009159158333333334,
+    "totalCostUsd": 0.005495495,
+    "latencyMs": {
+      "p50": 10182,
+      "p95": 14367
+    },
+    "avgPromptTokens": 8189.666666666667,
+    "locationSuggestion": {
+      "value": 1,
+      "n": 1,
+      "ci": [
+        0.20654329147389294,
+        1
+      ]
+    },
+    "agent": {
+      "avgToolCalls": 5.333333333333333,
+      "p95ToolCalls": 8,
+      "maxToolCalls": 8,
+      "budgetExhausted": 0,
+      "avgPeakPromptTokens": 3197.8333333333335,
+      "maxPeakPromptTokens": 4110,
+      "toolUse": {
+        "get_outline": 1.1666666666666665,
+        "read_section": 2.999999999999999,
+        "search": 0.5,
+        "list_documents": 0.6666666666666666
+      },
+      "retried": 0,
+      "unresolved": 0,
+      "retryFlips": {
+        "flagToPass": 0,
+        "passToFlag": 0
+      },
+      "failures": {}
+    }
+  }
+}

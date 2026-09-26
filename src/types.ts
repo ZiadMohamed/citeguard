@@ -20,6 +20,8 @@ export interface BenchItem {
   /** PMC: what was changed, e.g. "Table 1 -> Table 2" or "0.455 -> 0.458". */
   mutation?: string | null;
   originalClaim?: string;
+  /** pmchard: the original claim's label was read by a person (it is in the reviewed PMC sample). */
+  reviewed?: boolean;
 }
 
 export interface SourceDoc {
@@ -37,6 +39,8 @@ export const CheckResultSchema = z.object({
     .string()
     .nullish()
     .describe("For wrong_target: where the claim's data actually is, e.g. 'PMC123, Table 3'"),
+  /** Prompt v2 only: the model's own read on whether the verdict needed judgment. */
+  confidence: z.enum(["high", "low"]).nullish().catch(null),
 });
 export type CheckResult = z.infer<typeof CheckResultSchema>;
 
@@ -64,6 +68,17 @@ export interface RunRecord {
    * so the tool agent ran.
    */
   resolution?: "section" | "missing" | "search";
+  /** Resolver/hybrid with --cues: the code-raised retry note after a first "supported" verdict. */
+  cues?: string;
+  /** The citation named a figure/listing/section the store lacks; a whole-document check ran instead. */
+  warning?: string;
+  /** Hybrid only: which tier decided, the fast tier's own verdict, and time to the fast verdict. */
+  hybrid?: {
+    decidedBy: "code" | "fast" | "strong";
+    fastResult?: CheckResult;
+    fastLatencyMs: number;
+    escalationReason?: string;
+  };
 }
 
 export interface ToolStep {

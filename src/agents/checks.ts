@@ -1,4 +1,4 @@
-import { parseLocation, sameLocation, type Loc } from "../bench/locations.js";
+import { parseLocation, sameLocation, type Loc } from "../locations.js";
 import { missingNumberNote } from "../numbers.js";
 import { isQuoteGrounded, ungroundedFragments } from "../quote.js";
 import { resolveLocation } from "../resolve.js";
@@ -37,9 +37,10 @@ export function objectiveFailures(
     failures.push({ code: "missing_quote", message: "a supported verdict needs a verbatim quote as evidence" });
   }
 
-  const cited = parseLocation(input.citation, null);
-  const loc = parseLocation(result.location, cited?.doc ?? null);
-  const isCited = !!cited && !!loc && loc.doc === cited.doc && loc.table === cited.table;
+  const known = (t: string) => store.matchDocument(t);
+  const cited = parseLocation(input.citation, null, known);
+  const loc = parseLocation(result.location, cited?.doc ?? null, known);
+  const isCited = !!cited && !!loc && sameLocation(loc, cited) && sameLocation(cited, loc);
   if (loc && !isCited && !locationExists(loc, store)) {
     failures.push({ code: "bad_location", message: `the location "${result.location}" does not exist` });
   }
@@ -59,8 +60,7 @@ export function objectiveFailures(
 }
 
 function locationExists(loc: Loc, store: DocStore): boolean {
-  const doc = store.get(loc.doc);
-  return !!doc && (loc.table === null || !!store.findSection(doc, `Table ${loc.table}`));
+  return resolveLocation(store, loc).kind !== "missing";
 }
 
 /** The cited table, or the whole document when the citation names no table. */

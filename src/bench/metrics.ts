@@ -1,5 +1,5 @@
 import { VERDICTS, type RunRecord, type Verdict } from "../types.js";
-import { citedDoc, parseLocation, sameLocation, trueLocation } from "./locations.js";
+import { citedDoc, parseLocation, sameLocation, trueLocation } from "../locations.js";
 
 export interface Rate {
   value: number;

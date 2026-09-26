@@ -1,0 +1,172 @@
+{
+  "model": "google/gemini-3.5-flash-lite",
+  "agent": "resolve-tables-v2",
+  "dataset": "csr",
+  "split": "sample",
+  "raw": {
+    "n": 37,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.9090909090909091,
+      "n": 22,
+      "ci": [
+        0.7218461934161421,
+        0.9747051037171622
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0,
+      "n": 15,
+      "ci": [
+        0,
+        0.20388926630434784
+      ]
+    },
+    "flagPrecision": {
+      "value": 1,
+      "n": 20,
+      "ci": [
+        0.8388698745050667,
+        1
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.918918918918919,
+      "n": 37,
+      "ci": [
+        0.7869900750149847,
+        0.9720399336036787
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 34,
+      "ci": [
+        0.8984820937803899,
+        1
+      ]
+    },
+    "flaggedByType": {
+      "causation": {
+        "value": 0,
+        "n": 1,
+        "ci": [
+          0,
+          0.7934567085261071
+        ]
+      },
+      "comparison_nonsignificant": {
+        "value": 0.5,
+        "n": 2,
+        "ci": [
+          0.09452865480086614,
+          0.9054713451991339
+        ]
+      },
+      "direction_flip": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "magnitude": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "not_in_source": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "population_swap": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "qualitative_safety": {
+        "value": 1,
+        "n": 4,
+        "ci": [
+          0.5100999795960008,
+          1
+        ]
+      },
+      "subgroup_overreach": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0,
+        "n": 15,
+        "ci": [
+          0,
+          0.20388926630434784
+        ]
+      },
+      "swap_values": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      },
+      "timepoint_scope": {
+        "value": 1,
+        "n": 2,
+        "ci": [
+          0.34237195288961925,
+          1
+        ]
+      },
+      "timepoint_swap": {
+        "value": 1,
+        "n": 1,
+        "ci": [
+          0.20654329147389294,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 15,
+        "not_supported": 0,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 2,
+        "not_supported": 19,
+        "wrong_target": 1
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 0,
+        "wrong_target": 0
+      }
+    },
+    "costPerCheckUsd": 0.0005901567567567568,
+    "totalCostUsd": 0.0218358,
+    "latencyMs": {
+      "p50": 1008,
+      "p95": 1286
+    },
+    "avgPromptTokens": 865.1621621621622
+  }
+}

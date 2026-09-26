@@ -1,0 +1,283 @@
+{
+  "model": "qwen/qwen3.8-27b",
+  "agent": "baseline",
+  "dataset": "pmc",
+  "split": "sample",
+  "raw": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.88,
+      "n": 50,
+      "ci": [
+        0.7619492111337642,
+        0.9438247628937535
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.34,
+      "n": 50,
+      "ci": [
+        0.2243676963506106,
+        0.47846431458517147
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.7213114754098361,
+      "n": 61,
+      "ci": [
+        0.5982833136872678,
+        0.8181160348790846
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.75,
+      "n": 100,
+      "ci": [
+        0.6569535362992417,
+        0.8245490599627573
+      ]
+    },
+    "quoteGrounded": {
+      "value": 0.9473684210526315,
+      "n": 95,
+      "ci": [
+        0.8826495759419216,
+        0.9773122215198758
+      ]
+    },
+    "flaggedByType": {
+      "nonexistent_target": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "overstated": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "overstated_subtle": {
+        "value": 0.25,
+        "n": 8,
+        "ci": [
+          0.07147768885802763,
+          0.5907301208974108
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.34,
+        "n": 50,
+        "ci": [
+          0.2243676963506106,
+          0.47846431458517147
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_location": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_study": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 33,
+        "not_supported": 17,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 6,
+        "not_supported": 19,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 2,
+        "wrong_target": 23
+      }
+    },
+    "costPerCheckUsd": 0.003945335946000003,
+    "totalCostUsd": 0.39453359460000026,
+    "latencyMs": {
+      "p50": 15474,
+      "p95": 152438
+    },
+    "avgPromptTokens": 1391.98
+  },
+  "adjusted": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.9298245614035088,
+      "n": 57,
+      "ci": [
+        0.8329959829878215,
+        0.9723740270053409
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.18604651162790697,
+      "n": 43,
+      "ci": [
+        0.0974163558010598,
+        0.3261729323530596
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.8688524590163934,
+      "n": 61,
+      "ci": [
+        0.761978875735935,
+        0.932020038541319
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.86,
+      "n": 100,
+      "ci": [
+        0.7786263961619276,
+        0.914737342455351
+      ]
+    },
+    "quoteGrounded": {
+      "value": 0.9473684210526315,
+      "n": 95,
+      "ci": [
+        0.8826495759419216,
+        0.9773122215198758
+      ]
+    },
+    "flaggedByType": {
+      "author_error": {
+        "value": 1,
+        "n": 6,
+        "ci": [
+          0.6096569663469354,
+          0.9999999999999999
+        ]
+      },
+      "nonexistent_target": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      },
+      "not_an_error": {
+        "value": 0.3333333333333333,
+        "n": 3,
+        "ci": [
+          0.0614903152761605,
+          0.7923450448735121
+        ]
+      },
+      "not_in_source": {
+        "value": 1,
+        "n": 4,
+        "ci": [
+          0.5100999795960008,
+          1
+        ]
+      },
+      "overstated": {
+        "value": 1,
+        "n": 7,
+        "ci": [
+          0.6456611570247934,
+          1
+        ]
+      },
+      "overstated_subtle": {
+        "value": 0.3333333333333333,
+        "n": 6,
+        "ci": [
+          0.09676933255921683,
+          0.7000116786584712
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.175,
+        "n": 40,
+        "ci": [
+          0.08745302996883066,
+          0.3195029205439244
+        ]
+      },
+      "value_mismatch": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_location": {
+        "value": 1,
+        "n": 9,
+        "ci": [
+          0.7008472464490407,
+          1
+        ]
+      },
+      "wrong_study": {
+        "value": 1,
+        "n": 8,
+        "ci": [
+          0.6755843804891231,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 35,
+        "not_supported": 8,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 4,
+        "not_supported": 28,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 2,
+        "wrong_target": 23
+      }
+    },
+    "costPerCheckUsd": 0.003945335946000003,
+    "totalCostUsd": 0.39453359460000026,
+    "latencyMs": {
+      "p50": 15474,
+      "p95": 152438
+    },
+    "avgPromptTokens": 1391.98,
+    "overridesApplied": 13
+  }
+}

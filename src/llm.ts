@@ -29,6 +29,8 @@ export interface ChatRequest {
   toolChoice?: "auto" | "required" | { type: "function"; function: { name: string } };
   temperature?: number;
   maxTokens?: number;
+  /** OpenRouter's unified reasoning control. Omitted means the provider default. */
+  reasoning?: "low" | "medium" | "high";
 }
 
 export interface ChatResponse {
@@ -51,6 +53,7 @@ export async function chat(req: ChatRequest, attempts = 4): Promise<ChatResponse
     temperature: req.temperature ?? 0,
     max_tokens: req.maxTokens ?? 8000,
     usage: { include: true },
+    ...(req.reasoning && { reasoning: { effort: req.reasoning } }),
   });
 
   let lastError: unknown;

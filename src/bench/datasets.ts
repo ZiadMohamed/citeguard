@@ -1,6 +1,9 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { readJsonl } from "../jsonl.js";
 import type { BenchItem, RunRecord, SourceDoc, Verdict } from "../types.js";
+
+export { readJsonl };
 
 const ROOT = join(import.meta.dirname, "..", "..");
 const DATA_DIR = join(ROOT, "data");
@@ -18,6 +21,10 @@ export interface LabelOverride {
   category: string;
   status: string;
   note: string;
+  /** The reviewed item's text. An override applies only when the item still says this, so a
+   * regenerated dataset whose ids shifted can't silently relabel a different claim. */
+  claim?: string;
+  citation?: string;
 }
 
 export function loadDataset(name: string, split: "sample" | "full"): Dataset {
@@ -34,21 +41,31 @@ export function loadOverrides(dataset: string): Map<string, LabelOverride> {
   return new Map(readJsonl<LabelOverride>(path).map((o) => [o.id, o]));
 }
 
+/** True when the override was written for this item (same claim and citation, if recorded). */
+export function overrideMatches(o: LabelOverride, item: { claim: string; citation: string }): boolean {
+  return (o.claim === undefined || o.claim === item.claim) && (o.citation === undefined || o.citation === item.citation);
+}
+
 /**
  * Replaces benchmark labels with reviewed ones. Items whose label changed get the
  * review category as their errorType so the per-type breakdown shows what happened.
  */
+/** Override ids skipped because their item's text changed. Reported once per process. */
+const staleOverrides = new Set<string>();
+process.on("exit", () => {
+  if (staleOverrides.size) {
+    console.error(`warning: ${staleOverrides.size} reviewed label(s) skipped because the item's text changed (dataset regenerated?): ${[...staleOverrides].slice(0, 5).join(", ")}`);
+  }
+});
+
 export function applyOverrides(records: RunRecord[], overrides: Map<string, LabelOverride>): RunRecord[] {
   return records.map((r) => {
     const o = overrides.get(r.item.id);
     if (!o || o.label === r.item.label) return r;
+    if (!overrideMatches(o, r.item)) {
+      staleOverrides.add(o.id);
+      return r;
+    }
     return { ...r, item: { ...r.item, label: o.label, errorType: o.category } };
   });
-}
-
-export function readJsonl<T>(path: string): T[] {
-  return readFileSync(path, "utf8")
-    .split("\n")
-    .filter((l) => l.trim())
-    .map((l) => JSON.parse(l) as T);
 }

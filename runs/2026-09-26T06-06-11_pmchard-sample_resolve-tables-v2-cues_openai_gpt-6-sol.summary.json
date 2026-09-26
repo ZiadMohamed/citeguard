@@ -1,0 +1,116 @@
+{
+  "model": "openai/gpt-6-sol",
+  "agent": "resolve-tables-v2-cues",
+  "dataset": "pmchard",
+  "split": "sample",
+  "raw": {
+    "n": 100,
+    "failed": 0,
+    "catchRate": {
+      "value": 0.98,
+      "n": 50,
+      "ci": [
+        0.8950431352816304,
+        0.9964608319110235
+      ]
+    },
+    "falseAlarmRate": {
+      "value": 0.24,
+      "n": 50,
+      "ci": [
+        0.14297252401872207,
+        0.3741294937519236
+      ]
+    },
+    "flagPrecision": {
+      "value": 0.8032786885245902,
+      "n": 61,
+      "ci": [
+        0.6868982151122219,
+        0.8837231144046315
+      ]
+    },
+    "verdictAccuracy": {
+      "value": 0.87,
+      "n": 100,
+      "ci": [
+        0.7901947810519012,
+        0.9224290614158575
+      ]
+    },
+    "quoteGrounded": {
+      "value": 1,
+      "n": 100,
+      "ci": [
+        0.9630051925239981,
+        0.9999999999999999
+      ]
+    },
+    "flaggedByType": {
+      "direction_flip": {
+        "value": 1,
+        "n": 15,
+        "ci": [
+          0.7961107336956521,
+          1
+        ]
+      },
+      "significance_flip": {
+        "value": 1,
+        "n": 11,
+        "ci": [
+          0.7411599827511859,
+          1
+        ]
+      },
+      "SUPPORTED": {
+        "value": 0.24,
+        "n": 50,
+        "ci": [
+          0.14297252401872207,
+          0.3741294937519236
+        ]
+      },
+      "swap_values": {
+        "value": 0.9523809523809523,
+        "n": 21,
+        "ci": [
+          0.7733018341376452,
+          0.9915442305280766
+        ]
+      },
+      "timepoint_swap": {
+        "value": 1,
+        "n": 3,
+        "ci": [
+          0.43849391955098227,
+          1
+        ]
+      }
+    },
+    "confusion": {
+      "supported": {
+        "supported": 38,
+        "not_supported": 12,
+        "wrong_target": 0
+      },
+      "not_supported": {
+        "supported": 1,
+        "not_supported": 49,
+        "wrong_target": 0
+      },
+      "wrong_target": {
+        "supported": 0,
+        "not_supported": 0,
+        "wrong_target": 0
+      }
+    },
+    "costPerCheckUsd": 0.0032544340000000005,
+    "totalCostUsd": 0.32544340000000005,
+    "latencyMs": {
+      "p50": 3221,
+      "p95": 6090
+    },
+    "avgPromptTokens": 1283.54
+  }
+}

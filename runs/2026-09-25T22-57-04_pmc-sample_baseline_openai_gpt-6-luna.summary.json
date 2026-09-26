@@ -1,0 +1,122 @@
+{
+  "model": "openai/gpt-6-luna",
+  "agent": "baseline",
+  "dataset": "pmc",
+  "split": "sample",
+  "n": 100,
+  "failed": 0,
+  "catchRate": {
+    "value": 1,
+    "n": 50,
+    "ci": [
+      0.9286499658256813,
+      1
+    ]
+  },
+  "falseAlarmRate": {
+    "value": 0.24,
+    "n": 50,
+    "ci": [
+      0.14297252401872207,
+      0.3741294937519236
+    ]
+  },
+  "flagPrecision": {
+    "value": 0.8064516129032258,
+    "n": 62,
+    "ci": [
+      0.6914796824829172,
+      0.885663035798534
+    ]
+  },
+  "verdictAccuracy": {
+    "value": 0.83,
+    "n": 100,
+    "ci": [
+      0.7445181876635703,
+      0.8910652394022684
+    ]
+  },
+  "quoteGrounded": {
+    "value": 0.9506172839506173,
+    "n": 81,
+    "ci": [
+      0.8797959524607503,
+      0.9806310078983188
+    ]
+  },
+  "flaggedByType": {
+    "nonexistent_target": {
+      "value": 1,
+      "n": 10,
+      "ci": [
+        0.7224598312333834,
+        1
+      ]
+    },
+    "overstated": {
+      "value": 1,
+      "n": 10,
+      "ci": [
+        0.7224598312333834,
+        1
+      ]
+    },
+    "SUPPORTED": {
+      "value": 0.24,
+      "n": 50,
+      "ci": [
+        0.14297252401872207,
+        0.3741294937519236
+      ]
+    },
+    "value_mismatch": {
+      "value": 1,
+      "n": 10,
+      "ci": [
+        0.7224598312333834,
+        1
+      ]
+    },
+    "wrong_location": {
+      "value": 1,
+      "n": 10,
+      "ci": [
+        0.7224598312333834,
+        1
+      ]
+    },
+    "wrong_study": {
+      "value": 1,
+      "n": 10,
+      "ci": [
+        0.7224598312333834,
+        1
+      ]
+    }
+  },
+  "confusion": {
+    "supported": {
+      "supported": 38,
+      "not_supported": 12,
+      "wrong_target": 0
+    },
+    "not_supported": {
+      "supported": 0,
+      "not_supported": 20,
+      "wrong_target": 0
+    },
+    "wrong_target": {
+      "supported": 0,
+      "not_supported": 5,
+      "wrong_target": 25
+    }
+  },
+  "costPerCheckUsd": 0.00014564770000000002,
+  "totalCostUsd": 0.014564770000000001,
+  "latencyMs": {
+    "p50": 2262,
+    "p95": 4145
+  },
+  "avgPromptTokens": 1084.63
+}

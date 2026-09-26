@@ -60,12 +60,35 @@ export function missingNumberNote(claim: string, sourceText: string, label: stri
   return `the verdict was "supported" but the claim's ${list} ${missing.length > 1 ? "do" : "does"} not appear in ${label}. Compare every number in the claim with the source; if a number is legitimately derived from it (e.g. a difference, or a percentage computed from counts), say so in the reason`;
 }
 
+/**
+ * True if a percentage in the claim is k/n of two counts on one source line ("49/200", "49 (200)",
+ * "49 | 200"), rounded to the claim's precision. Only whole-number pairs on the same row count,
+ * so a coincidence across the table doesn't.
+ */
+export function derivedPercent(claim: Num, sourceText: string): boolean {
+  const tolerance = 0.5 * 10 ** -claim.decimals + 1e-9;
+  for (const line of sourceText.split("\n")) {
+    const ints = numbersIn(line).filter((n) => n.decimals === 0 && n.value > 0).map((n) => n.value);
+    if (ints.length > 12) continue;
+    for (const k of ints) for (const n of ints) {
+      if (k < n && Math.abs((100 * k) / n - Math.abs(claim.value)) <= tolerance) return true;
+    }
+  }
+  return false;
+}
+
+const PERCENT_AFTER = /^\s?%/;
+
 /** The claim's informative numbers that don't appear in the source text. */
 export function missingNumbers(claim: string, sourceText: string, nearestCount = 2): MissingNumber[] {
   const source = numbersIn(sourceText);
   const distinct = [...new Map(source.map((s) => [s.norm, s])).values()];
+  const percents = new Set(
+    [...claim.matchAll(NUM_RE)].filter((m) => PERCENT_AFTER.test(claim.slice(m.index! + m[0].length))).map((m) => parseNum(m[0]).norm),
+  );
   return informativeNumbers(claim)
     .filter((n) => !hasNumber(n, source))
+    .filter((n) => !(percents.has(n.norm) && derivedPercent(n, sourceText)))
     .map((n) => ({
       number: n.raw,
       nearest: distinct
@@ -74,6 +97,44 @@ export function missingNumbers(claim: string, sourceText: string, nearestCount =
         .slice(0, nearestCount)
         .map(({ s }) => s.raw),
     }));
+}
+
+export interface SignConflict {
+  number: string;
+  /** "decrease" or "increase", from the claim's own words or its explicit sign. */
+  claimDirection: "decrease" | "increase";
+  /** The source's value, as written, with the opposite explicit sign. */
+  source: string;
+}
+
+const DOWN = /\b(?:decreas\w*|reduc\w*|fell|fall\w*|drop\w*|declin\w*|lower\w*|loss|lost)\b[^.;]{0,40}$/i;
+const UP = /\b(?:increas\w*|rose|rise|rising|gain\w*|grew|elevat\w*|rais\w*)\b[^.;]{0,40}$/i;
+
+/**
+ * Numbers whose direction in the claim contradicts an explicit sign in the source: "decreased by
+ * 2.7" against "+2.7", or "-1.3" against "+1.3". Only explicit signs in the source count, since
+ * tables often print a change without one; and only when the source has no same-signed copy.
+ */
+export function signConflicts(claim: string, sourceText: string): SignConflict[] {
+  const signed = [...sourceText.matchAll(/(?<![\w.])([+\-−])\s?(\d+(?:\.\d+)?)/g)].map((m) => ({
+    raw: m[0],
+    sign: m[1] === "+" ? 1 : -1,
+    norm: parseNum(m[2]!).norm,
+  }));
+  const out: SignConflict[] = [];
+  for (const m of claim.matchAll(NUM_RE)) {
+    const n = parseNum(m[0]);
+    if (!informativeNumbers(m[0]).length) continue;
+    const before = claim.slice(0, m.index!);
+    const explicit = /^[-−]/.test(m[0]) ? -1 : /\+\s?$/.test(before) ? 1 : 0;
+    const dir = explicit || (DOWN.test(before) ? -1 : UP.test(before) ? 1 : 0);
+    if (!dir) continue;
+    const abs = n.norm.replace(/^-/, "");
+    const matches = signed.filter((s) => s.norm === abs);
+    if (!matches.length || matches.some((s) => s.sign === dir)) continue;
+    out.push({ number: m[0], claimDirection: dir < 0 ? "decrease" : "increase", source: matches[0]!.raw });
+  }
+  return out;
 }
 
 function parseNum(raw: string): Num {

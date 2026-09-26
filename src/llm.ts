@@ -26,6 +26,7 @@ export interface ChatRequest {
   model: string;
   messages: Message[];
   tools?: ToolSpec[];
+  toolChoice?: "auto" | "required" | { type: "function"; function: { name: string } };
   temperature?: number;
   maxTokens?: number;
 }
@@ -46,6 +47,7 @@ export async function chat(req: ChatRequest, attempts = 4): Promise<ChatResponse
     model: req.model,
     messages: req.messages,
     tools: req.tools,
+    tool_choice: req.toolChoice,
     temperature: req.temperature ?? 0,
     max_tokens: req.maxTokens ?? 2000,
     usage: { include: true },

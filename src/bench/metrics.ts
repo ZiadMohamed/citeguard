@@ -1,4 +1,5 @@
 import { VERDICTS, type RunRecord, type Verdict } from "../types.js";
+import { citedDoc, parseLocation, sameLocation, trueLocation } from "./locations.js";
 
 export interface Rate {
   value: number;
@@ -28,6 +29,30 @@ export interface Summary {
   totalCostUsd: number;
   latencyMs: { p50: number; p95: number };
   avgPromptTokens: number;
+  /** On wrong-target items: % where the agent named the location the claim really comes from. */
+  locationSuggestion?: Rate;
+  /** Tool-using agents only. */
+  agent?: AgentStats;
+}
+
+export interface AgentStats {
+  avgToolCalls: number;
+  p95ToolCalls: number;
+  maxToolCalls: number;
+  budgetExhausted: number;
+  /** Largest single prompt per check: how big the context got. */
+  avgPeakPromptTokens: number;
+  maxPeakPromptTokens: number;
+  /** Average calls per check, by tool. */
+  toolUse: Record<string, number>;
+  /** Checks that needed at least one fresh-context retry. */
+  retried: number;
+  /** Checks whose final attempt still failed an objective check. */
+  unresolved: number;
+  /** Checks where a retry turned a flag into a pass, or a pass into a flag. */
+  retryFlips: { flagToPass: number; passToFlag: number };
+  /** How often each objective check fired, over all attempts. */
+  failures: Record<string, number>;
 }
 
 const isFlag = (v: Verdict) => v !== "supported";
@@ -81,7 +106,62 @@ export function summarize(records: RunRecord[]): Summary {
     avgPromptTokens: records.length
       ? records.reduce((s, r) => s + r.usage.promptTokens, 0) / records.length
       : 0,
+    ...locationSuggestion(ok),
+    ...agentStats(records),
   };
+}
+
+function locationSuggestion(records: RunRecord[]): Pick<Summary, "locationSuggestion"> {
+  const scored = records.filter((r) => r.item.label === "wrong_target" && trueLocation(r.item));
+  if (!records.some((r) => r.trace) || scored.length === 0) return {};
+  const right = scored.filter((r) =>
+    sameLocation(parseLocation(r.result!.suggestedLocation, citedDoc(r.item)), trueLocation(r.item)!),
+  ).length;
+  return { locationSuggestion: rate(right, scored.length) };
+}
+
+function agentStats(records: RunRecord[]): Pick<Summary, "agent"> {
+  const traced = records.flatMap((r) => (r.trace ? [r.trace] : []));
+  if (traced.length === 0) return {};
+  const calls = traced.map((t) => t.toolCalls).sort((a, b) => a - b);
+  const peaks = traced.map((t) => t.peakPromptTokens);
+  const toolUse: Record<string, number> = {};
+  for (const t of traced) for (const s of t.steps) toolUse[s.tool] = (toolUse[s.tool] ?? 0) + 1 / traced.length;
+  const failures: Record<string, number> = {};
+  const retryFlips = { flagToPass: 0, passToFlag: 0 };
+  for (const r of records) {
+    const attempts = r.trace?.attempts ?? [];
+    for (const a of attempts) for (const f of a.failures) failures[f.code] = (failures[f.code] ?? 0) + 1;
+    if (attempts.length > 1 && r.result) {
+      const first = isFlag(attempts[0]!.result.verdict);
+      const final = isFlag(r.result.verdict);
+      if (first && !final) retryFlips.flagToPass++;
+      if (!first && final) retryFlips.passToFlag++;
+    }
+  }
+  return {
+    agent: {
+      avgToolCalls: calls.reduce((a, b) => a + b, 0) / calls.length,
+      p95ToolCalls: percentile(calls, 0.95),
+      maxToolCalls: calls[calls.length - 1]!,
+      budgetExhausted: traced.filter((t) => t.budgetExhausted).length,
+      avgPeakPromptTokens: peaks.reduce((a, b) => a + b, 0) / peaks.length,
+      maxPeakPromptTokens: Math.max(...peaks),
+      toolUse,
+      retried: traced.filter((t) => (t.attempts?.length ?? 1) > 1).length,
+      unresolved: traced.filter((t) => (t.attempts?.at(-1)?.failures.length ?? 0) > 0).length,
+      retryFlips,
+      failures,
+    },
+  };
+}
+
+/** The same records scored on each check's first attempt only, i.e. as if there were no retries. */
+export function firstAttemptOnly(records: RunRecord[]): RunRecord[] {
+  return records.map((r) => {
+    const first = r.trace?.attempts?.[0];
+    return first && r.trace!.attempts!.length > 1 ? { ...r, result: first.result } : r;
+  });
 }
 
 export function rate(k: number, n: number): Rate {
@@ -117,6 +197,22 @@ export function formatSummary(s: Summary): string {
     `quote grounded    ${pct(s.quoteGrounded)}`,
     `cost/check  $${s.costPerCheckUsd.toFixed(5)}   total $${s.totalCostUsd.toFixed(4)}`,
     `latency p50 ${(s.latencyMs.p50 / 1000).toFixed(1)}s  p95 ${(s.latencyMs.p95 / 1000).toFixed(1)}s   avg prompt tokens ${Math.round(s.avgPromptTokens)}`,
+    ...(s.locationSuggestion ? [`right location suggested (wrong-target items)  ${pct(s.locationSuggestion)}`] : []),
+    ...(s.agent
+      ? [
+          `tool calls avg ${s.agent.avgToolCalls.toFixed(1)}  p95 ${s.agent.p95ToolCalls}  max ${s.agent.maxToolCalls}   budget exhausted ${s.agent.budgetExhausted}`,
+          `peak context tokens avg ${Math.round(s.agent.avgPeakPromptTokens)}  max ${s.agent.maxPeakPromptTokens}`,
+          `tool use per check: ${Object.entries(s.agent.toolUse)
+            .sort(([, a], [, b]) => b - a)
+            .map(([k, v]) => `${k} ${v.toFixed(2)}`)
+            .join(", ")}`,
+          `retried ${s.agent.retried}  unresolved ${s.agent.unresolved}  flips: flag->pass ${s.agent.retryFlips.flagToPass}, pass->flag ${s.agent.retryFlips.passToFlag}   check failures: ${
+            Object.entries(s.agent.failures)
+              .map(([k, v]) => `${k} ${v}`)
+              .join(", ") || "none"
+          }`,
+        ]
+      : []),
     ``,
     `flagged as problem, by ground-truth type:`,
     ...Object.entries(s.flaggedByType).map(([k, r]) => `  ${k.padEnd(18)} ${pct(r)}`),

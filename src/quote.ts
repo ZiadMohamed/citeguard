@@ -5,15 +5,22 @@
  * fragment must appear somewhere in the source.
  */
 export function isQuoteGrounded(quote: string, source: string): boolean {
-  const fragments = quote
+  const fragments = splitQuote(quote);
+  return fragments.length > 0 && ungroundedFragments(quote, source).length === 0;
+}
+
+/** The fragments of a quote (as the model wrote them) that don't appear in the source. */
+export function ungroundedFragments(quote: string, source: string): string[] {
+  const haystack = normalize(source);
+  return splitQuote(quote).filter((f) => !haystack.includes(normalize(f)));
+}
+
+function splitQuote(quote: string): string[] {
+  return quote
     .replace(/^\s*Title:\s*/i, "")
     .split(/\.\.\.|…|\n/)
-    .map(normalize)
-    .filter((f) => f.length > 0);
-  if (fragments.length === 0) return false;
-
-  const haystack = normalize(source);
-  return fragments.every((f) => haystack.includes(f));
+    .filter((f) => normalize(f).length > 0)
+    .map((f) => f.trim());
 }
 
 function normalize(s: string): string {

@@ -6,6 +6,8 @@
   "scripts": {
     "prep:scifact": "uv run python/prep_scifact.py",
     "prep:pmc": "uv run python/prep_pmc.py",
+    "prep:refs": "uv run python/prep_refs.py",
+    "prep:docs": "uv run python/build_docs.py",
     "bench": "tsx src/bench/run.ts",
     "rescore": "tsx src/bench/rescore.ts",
     "test": "tsx --test src/*.test.ts src/**/*.test.ts",
@@ -18,6 +20,7 @@
     ]
   },
   "dependencies": {
+    "minisearch": "^7.2.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {

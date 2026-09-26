@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      minisearch:
+        specifier: ^7.2.0
+        version: 7.2.0
       zod:
         specifier: ^4.6.5
         version: 4.6.5
@@ -313,6 +316,9 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
+  minisearch@7.2.0:
+    resolution: {integrity: sha512-dqT2XBYUOZOiC5t2HRnwADjhNS2cecp9u+TJRiJ1Qp/f5qjkeT5APcGPjHw+bz89Ms8Jp+cG4AlE+QZ/QnDglg==}
+
   tsx@4.23.15:
     resolution: {integrity: sha512-Yiex1Ovn8z2xPpOWckIiysV1SSyRMY9BkLF++q0yKiDxCqRhosKfMg3janKkiLBwZ5c/YryloKwGZcrEmtwxKw==}
     engines: {node: '>=18.0.0'}
@@ -504,6 +510,8 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
+
+  minisearch@7.2.0: {}
 
   tsx@4.23.15:
     dependencies:

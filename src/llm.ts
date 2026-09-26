@@ -49,7 +49,7 @@ export async function chat(req: ChatRequest, attempts = 4): Promise<ChatResponse
     tools: req.tools,
     tool_choice: req.toolChoice,
     temperature: req.temperature ?? 0,
-    max_tokens: req.maxTokens ?? 2000,
+    max_tokens: req.maxTokens ?? 8000,
     usage: { include: true },
   });
 

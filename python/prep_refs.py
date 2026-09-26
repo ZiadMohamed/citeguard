@@ -41,7 +41,7 @@ PMC_RAW = P.ROOT / "data" / "pmc" / "raw"
 OUT = P.ROOT / "data" / "pmcrefs"
 RAW = OUT / "raw"
 CITING = OUT / "citing"
-N_EXTRA_CITING = 250
+N_EXTRA_CITING = 1200
 SEED = 11
 MIN_UNIT_COVERAGE = 0.8
 MAX_CLAIMS_PER_CITING_PAPER = 6
@@ -63,19 +63,33 @@ def extra_citing_papers() -> list[Path]:
     """More RCT papers from the same Europe PMC search, used only as citing papers (not added
     to the study-report corpus). Picks up after the 300 candidates prep_pmc.py already used."""
     cache = OUT / "citing_candidates.json"
-    if cache.exists():
-        ids = json.loads(cache.read_text())
-    else:
-        ids, cursor = [], "*"
-        for _ in range(6):
-            qs = urllib.parse.urlencode({"query": P.SEARCH_QUERY, "format": "json", "pageSize": 100,
-                                         "resultType": "lite", "cursorMark": cursor})
-            data = json.loads(urllib.request.urlopen(f"https://www.ebi.ac.uk/europepmc/webservices/rest/search?{qs}").read())
-            ids += [r["pmcid"] for r in data["resultList"]["result"] if r.get("pmcid")]
-            cursor = data.get("nextCursorMark", cursor)
-        cache.write_text(json.dumps(ids))
+    ids = json.loads(cache.read_text()) if cache.exists() else []
     known = {f.stem for f in PMC_RAW.glob("PMC*.xml")} | set(json.loads((PMC_RAW / "candidates.json").read_text()))
-    ids = [i for i in ids if i not in known][:N_EXTRA_CITING]
+    unused = [i for i in ids if i not in known]
+    cursor = "*"
+    pages = 0
+    while len(unused) < N_EXTRA_CITING and pages < 40:
+        qs = urllib.parse.urlencode({"query": P.SEARCH_QUERY, "format": "json", "pageSize": 100,
+                                     "resultType": "lite", "cursorMark": cursor})
+        data = json.loads(urllib.request.urlopen(f"https://www.ebi.ac.uk/europepmc/webservices/rest/search?{qs}").read())
+        batch = [r["pmcid"] for r in data["resultList"]["result"] if r.get("pmcid")]
+        if not batch:
+            break
+        ids += batch
+        unused = [i for i in ids if i not in known]
+        cursor = data.get("nextCursorMark", cursor)
+        pages += 1
+    # Dedup while keeping order, then persist the full search list.
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for i in ids:
+        if i not in seen:
+            seen.add(i)
+            deduped.append(i)
+    ids = deduped
+    cache.write_text(json.dumps(ids))
+    unused = [i for i in ids if i not in known]
+    ids = unused[:N_EXTRA_CITING]
     CITING.mkdir(parents=True, exist_ok=True)
 
     def fetch(pmcid: str) -> Path | None:
@@ -175,6 +189,47 @@ def is_claim_text(s: str) -> bool:
     return 40 <= len(s) <= 400 and not re.search(r"\b(Tables?|Figures?|Fig\.)\b", s)
 
 
+# IL-27, FGF-21, SF-36 and similar: the digits are part of a name, not a measurement.
+NAME_TOKEN = re.compile(r"\b[A-Za-z]{1,12}[-−‐‒–—]\d+(?:\.\d+)?\b")
+ATTRIB_VERBS = r"reported|found|showed|shown|demonstrated|observed|revealed|indicated|estimated|enrolled"
+
+
+def claim_numbers(text: str) -> list[str]:
+    """Distinct informative numbers, ignoring those glued to a name (IL-27, FGF-21)."""
+    cleaned = NAME_TOKEN.sub(" ", text)
+    seen: set[str] = set()
+    out: list[str] = []
+    for n in P.informative_numbers(cleaned):
+        if n not in seen:
+            seen.add(n)
+            out.append(n)
+    return out
+
+
+def is_attributive(claim: str, cite_label: str | None) -> bool:
+    """True if the sentence reports the cited paper's findings, not the citing study's own methods.
+
+    Kept: "Smith et al. reported…", "a trial showed…", or the cited author's name.
+    Dropped: protocol copy ("samples stored at −80 °C"), scale definitions, "as previously described".
+    """
+    if re.search(r"\b(?:as previously described|previously published in)\b", claim, re.I):
+        return False
+    text = re.sub(r"\b(?:this|our|the present)\s+(?:study|analysis|trial)\b", " ", claim, flags=re.I)
+    if cite_label:
+        author = re.split(r"\s+(?:et al\.?|and)\s+|\s+\d{4}", cite_label, maxsplit=1)[0].strip(" .,")
+        if len(author) >= 3 and re.search(rf"\b{re.escape(author)}\b", claim, re.I):
+            return True
+    if re.search(r"\bet al\.?\b", claim, re.I):
+        return True
+    if re.search(r"\b(?:trial|study|studies|meta-analysis|review)\b", text, re.I) and re.search(
+        rf"\b(?:{ATTRIB_VERBS})\b", text, re.I
+    ):
+        return True
+    if re.search(r"\bin their study\b|\bas reported previously\b", text, re.I):
+        return True
+    return False
+
+
 # ---------------------------------------------------------------- cited side
 
 
@@ -204,7 +259,10 @@ def parse_full(pmcid: str, xml: str) -> dict | None:
     abstract = [P.text_of(p) for p in main.iter("p")] if main is not None else []
     units = [("Abstract", t) for t in abstract if t]
     units += [(p["section"] or "Body", p["text"]) for p in paper["paragraphs"] if p["text"]]
-    units += [(t["label"], " ".join(t["rows"]) + " " + t["foot"]) for t in paper["tables"]]
+    units += [
+        (t["label"], " ".join([t["caption"], *t["rows"], t["foot"]]))
+        for t in paper["tables"]
+    ]
     return {
         "id": pmcid,
         "title": paper["title"],
@@ -216,7 +274,17 @@ def parse_full(pmcid: str, xml: str) -> dict | None:
 
 
 def all_numbers(doc: dict) -> set[str]:
-    return set().union(*(nums for _, nums in doc["units"])) if doc["units"] else set()
+    """Every number in the paper, including titles, headings and table captions.
+
+    Used to verify that a mutated value is absent from the whole document. Units
+    alone miss captions and section titles, which let a few 'absent' values through.
+    """
+    texts = [doc["title"], *doc["abstract"]]
+    texts += [p["section"] for p in doc["paragraphs"]]
+    texts += [p["text"] for p in doc["paragraphs"]]
+    for t in doc["tables"]:
+        texts += [t["label"], t["caption"], t["foot"], *t["rows"]]
+    return {P.normalize_number(x) for text in texts for x in P.NUM_RE.findall(text or "")}
 
 
 def best_unit(nums: list[str], doc: dict) -> tuple[float, str]:
@@ -367,10 +435,11 @@ def main() -> None:
             for claim, rids in cited_sentences(p):
                 if len(rids) != 1 or rids[0] not in refs or not is_claim_text(claim):
                     continue
-                nums = P.informative_numbers(claim)
-                if len(nums) >= 2:
+                nums = claim_numbers(claim)
+                label = refs[rids[0]].get("label")
+                if len(nums) >= 2 and is_attributive(claim, label):
                     candidates.append({"citing": f.stem, "claim": claim, "rid": rids[0], "numbers": nums, "refs": refs})
-    print(f"{len(candidates)} candidate sentences cite one reference and have >=2 informative numbers")
+    print(f"{len(candidates)} candidate sentences cite one reference, have >=2 distinct numbers, and report its findings")
 
     cache_path = OUT / "idconv.json"
     cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}

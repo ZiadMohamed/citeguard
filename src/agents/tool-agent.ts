@@ -21,6 +21,20 @@ How to work:
 
 ${VERDICT_RULES}`;
 
+/** Models whose providers reject tool_choice "required" (e.g. Anthropic with extended thinking). */
+const autoToolChoice = new Set<string>();
+
+async function chatWithTools(model: string, messages: Message[]) {
+  const toolChoice = autoToolChoice.has(model) ? "auto" : "required";
+  try {
+    return await chat({ model, messages, tools: TOOL_SPECS, toolChoice });
+  } catch (err) {
+    if (toolChoice === "auto" || !(err instanceof Error && /tool_choice/i.test(err.message))) throw err;
+    autoToolChoice.add(model);
+    return chat({ model, messages, tools: TOOL_SPECS, toolChoice: "auto" });
+  }
+}
+
 const COULD_NOT_VERIFY: CheckResult = {
   verdict: "not_supported",
   quote: "",
@@ -63,7 +77,7 @@ export async function checkWithTools(
         trace.budgetExhausted = true;
         return finish(COULD_NOT_VERIFY);
       }
-      const res = await chat({ model, messages, tools: TOOL_SPECS, toolChoice: "required" });
+      const res = await chatWithTools(model, messages);
       usage = addUsage(usage, res.usage);
       trace.llmTurns++;
       trace.peakPromptTokens = Math.max(trace.peakPromptTokens, res.usage.promptTokens);
@@ -134,6 +148,8 @@ export async function checkWithRetries(
   const total: AgentTrace = { steps: [], toolCalls: 0, llmTurns: 0, budgetExhausted: false, peakPromptTokens: 0 };
   let usage = ZERO_USAGE;
   let retryNote: string | undefined;
+  /** Set once the number check has fired; later attempts carry it and aren't number-checked again. */
+  let numberNote: string | undefined;
 
   for (let i = 0; ; i++) {
     let out: ToolAgentOutput;
@@ -150,7 +166,7 @@ export async function checkWithRetries(
     total.peakPromptTokens = Math.max(total.peakPromptTokens, out.trace.peakPromptTokens);
     total.budgetExhausted = out.trace.budgetExhausted;
 
-    const failures = objectiveFailures(out, input.citation, store);
+    const failures = objectiveFailures(out, input, store, { checkNumbers: !numberNote });
     attempts.push({ result: out.result, failures });
     const trace = { ...total, attempts };
     if (failures.length === 0) return { ...out, usage, trace };
@@ -160,7 +176,9 @@ export async function checkWithRetries(
         out.result.verdict === "supported" ? { ...COULD_NOT_VERIFY, reason: `Could not verify: ${why}.` } : out.result;
       return { ...out, result, usage, trace };
     }
-    retryNote = why;
+    const firedNow = failures.some((f) => f.code === "number_missing");
+    numberNote ??= failures.find((f) => f.code === "number_missing")?.message;
+    retryNote = numberNote && !firedNow ? `${why}; ${numberNote}` : why;
   }
 }
 

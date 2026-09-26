@@ -69,7 +69,13 @@ export interface ToolStep {
   attempt?: number;
 }
 
-export type FailureCode = "budget_exhausted" | "ungrounded_quote" | "missing_quote" | "bad_location" | "off_target";
+export type FailureCode =
+  | "budget_exhausted"
+  | "ungrounded_quote"
+  | "missing_quote"
+  | "bad_location"
+  | "off_target"
+  | "number_missing";
 
 export interface Attempt {
   result: CheckResult;

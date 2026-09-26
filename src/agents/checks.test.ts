@@ -20,10 +20,17 @@ const trace = (budgetExhausted = false): AgentTrace => ({
 const result = (verdict: Verdict, quote: string, location: string): CheckResult => ({
   verdict, quote, location, reason: "",
 });
-const codes = (r: CheckResult, citation = "PMC1, Table 2", budgetExhausted = false) =>
-  objectiveFailures({ result: r, sourceText: "Hemoglobin | 12.3", trace: trace(budgetExhausted) }, citation, store).map(
-    (f) => f.code,
-  );
+const codes = (
+  r: CheckResult,
+  citation = "PMC1, Table 2",
+  { budgetExhausted = false, claim = "Hemoglobin was 12.3", checkNumbers = true } = {},
+) =>
+  objectiveFailures(
+    { result: r, sourceText: "Hemoglobin | 12.3", trace: trace(budgetExhausted) },
+    { claim, citation },
+    store,
+    { checkNumbers },
+  ).map((f) => f.code);
 
 describe("objectiveFailures", () => {
   it("accepts a grounded verdict on the cited location", () => {
@@ -53,6 +60,22 @@ describe("objectiveFailures", () => {
   });
 
   it("treats budget exhaustion as a failure", () => {
-    assert.deepEqual(codes(result("not_supported", "", ""), "PMC1, Table 2", true), ["budget_exhausted"]);
+    assert.deepEqual(codes(result("not_supported", "", ""), "PMC1, Table 2", { budgetExhausted: true }), [
+      "budget_exhausted",
+    ]);
+  });
+
+  it("rejects a supported verdict when a claim number isn't at the cited location", () => {
+    const supported = result("supported", "Hemoglobin | 12.3", "PMC1, Table 2");
+    assert.deepEqual(codes(supported, "PMC1, Table 2", { claim: "Hemoglobin was 13.2" }), ["number_missing"]);
+    assert.deepEqual(codes(supported, "PMC1, Table 2", { claim: "Hemoglobin was 13.2", checkNumbers: false }), []);
+    const flag = result("not_supported", "Hemoglobin | 12.3", "PMC1, Table 2");
+    assert.deepEqual(codes(flag, "PMC1, Table 2", { claim: "Hemoglobin was 13.2" }), []);
+  });
+
+  it("checks document-level citations against the whole document", () => {
+    const supported = result("supported", "Hemoglobin | 12.3", "PMC1, Table 2");
+    assert.deepEqual(codes(supported, "Smith 2020 (PMC1)", { claim: "Age 34.2, hemoglobin 12.3" }), []);
+    assert.deepEqual(codes(supported, "Smith 2020 (PMC1)", { claim: "Age 43.2, hemoglobin 12.3" }), ["number_missing"]);
   });
 });

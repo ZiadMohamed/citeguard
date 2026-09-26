@@ -19,3 +19,48 @@
 {"id": "pmc-0193", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'Suggesting' became 'showing' parallel improvement from a nonsignificant interaction. Agent miss."}
 {"id": "pmc-0157", "label": "supported", "category": "not_an_error", "status": "confirmed", "note": "'Slightly lower' became 'lower' with p = .026. Arguably more accurate. Injected error is not actually an error."}
 {"id": "pmc-0151", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'By 3 months' became 'Overall' but the numbers are 3-month values. Agent miss."}
+{"id": "pmc-0003", "label": "not_supported", "category": "not_in_source", "status": "confirmed", "note": "Every statistic matches (F = 28.39, p < 0.001), but the table has only F-tests, so 'increased' can't be verified at the cited location. Rule: a citation must let a QC reviewer verify every material part of the claim there."}
+{"id": "pmc-0004", "label": "supported", "category": "correct", "status": "confirmed", "note": "t = 2.04, p = 0.04 (quality of life) and t = 5.67, p < 0.001 (self-care) at 2 weeks match."}
+{"id": "pmc-0015", "label": "supported", "category": "correct", "status": "confirmed", "note": "Hardness change means (109.67, 76.15, 36.22) match."}
+{"id": "pmc-0016", "label": "supported", "category": "correct", "status": "confirmed", "note": "Interaction P = 0.453 (fasting glucose) and 0.865 (HbA1c) match."}
+{"id": "pmc-0019", "label": "supported", "category": "correct", "status": "confirmed", "note": "Leptin differences, CIs and P values match (the table's CIs are 99%). 'Large reduction' is a fair reading."}
+{"id": "pmc-0022", "label": "supported", "category": "correct", "status": "confirmed", "note": "ICUR US $559 (ILD) and US $19,134 (COPD) per QALY match."}
+{"id": "pmc-0030", "label": "supported", "category": "correct", "status": "confirmed", "note": "Dietary percentages match."}
+{"id": "pmc-0035", "label": "supported", "category": "correct", "status": "confirmed", "note": "Sensitivity 84.1%, specificity 68.0%, AUC 0.761 at MUACZ < -1 match. 'Optimal' is interpretive (the table lists two thresholds)."}
+{"id": "pmc-0036", "label": "supported", "category": "correct", "status": "confirmed", "note": "Counts and percentages (21, 208, 4, 218) match."}
+{"id": "pmc-0040", "label": "supported", "category": "correct", "status": "confirmed", "note": "Interaction F = 0.564, p = 0.457 and group F = 0.509, p = 0.480 match."}
+{"id": "pmc-0041", "label": "supported", "category": "correct", "status": "confirmed", "note": "US $705 vs US $503 at 12 months match. 'This' refers to the cost in the previous sentence."}
+{"id": "pmc-0042", "label": "supported", "category": "correct", "status": "confirmed", "note": "QALY 0.0822 (0.010) vs 0.0795 (0.011) match."}
+{"id": "pmc-0043", "label": "supported", "category": "correct", "status": "confirmed", "note": "Baseline age 70 (8) and 46 (38%) female match."}
+{"id": "pmc-0044", "label": "supported", "category": "correct", "status": "confirmed", "note": "P = 0.002 (urine output) and P = 0.009 (PaO2/FiO2) match."}
+{"id": "pmc-0046", "label": "supported", "category": "correct", "status": "confirmed", "note": "Interaction, time and group F and p values match."}
+{"id": "pmc-0048", "label": "supported", "category": "correct", "status": "confirmed", "note": "Post-intervention scores 80.58 +/- 7.28 and 71.37 +/- 10.21 match; the intervention group's pre-post p = 0.00 supports 'significantly'."}
+{"id": "pmc-0051", "label": "supported", "category": "correct", "status": "confirmed", "note": "ITT and PP means and p-values match."}
+{"id": "pmc-0055", "label": "supported", "category": "correct", "status": "confirmed", "note": "US $0.09 vs US $0.11 per minute match."}
+{"id": "pmc-0056", "label": "supported", "category": "correct", "status": "confirmed", "note": "p = 0.228 and 0.294 match."}
+{"id": "pmc-0061", "label": "supported", "category": "correct", "status": "confirmed", "note": "Energy intake differences, CIs and P values match."}
+{"id": "pmc-0067", "label": "supported", "category": "correct", "status": "confirmed", "note": "t = -1.168, p = 0.267, g = 0.208 match."}
+{"id": "pmc-0068", "label": "supported", "category": "correct", "status": "confirmed", "note": "138.85 +/- 9.43 vs 130.62 +/- 8.46, p = 0.007 match."}
+{"id": "pmc-0070", "label": "supported", "category": "correct", "status": "confirmed", "note": "Values match; the table prints 'p < 0.000', which the claim reports as p < 0.001. A trap for pedantic checkers."}
+{"id": "pmc-0074", "label": "supported", "category": "correct", "status": "confirmed", "note": "US $17,428, US $189 and US $8 per person per month match."}
+{"id": "pmc-0075", "label": "supported", "category": "correct", "status": "confirmed", "note": "BMIz estimates and CIs match. 'Declined' for CHAMP is loose (its CI crosses zero), but the claim reports the CI and keeps 'significantly' for CHAMP+."}
+{"id": "pmc-0081", "label": "supported", "category": "correct", "status": "confirmed", "note": "t = 1.93, p = 0.04 and t = 5.20, p < 0.001 match. The table is internally inconsistent (t = 1.93 with df 138 gives p ~ 0.056), but the claim copies it faithfully. A trap for pedantic checkers."}
+{"id": "pmc-0082", "label": "supported", "category": "correct", "status": "confirmed", "note": "Decrease 43.82 to 42.59, t = 1.490, p = 0.156, g = 0.384 match."}
+{"id": "pmc-0084", "label": "supported", "category": "correct", "status": "confirmed", "note": "-1.39 (1.35) and -1.38 (1.33) match."}
+{"id": "pmc-0087", "label": "supported", "category": "correct", "status": "confirmed", "note": "t = 2.24, p = 0.02 at 4 months matches."}
+{"id": "pmc-0089", "label": "supported", "category": "correct", "status": "confirmed", "note": "P = 0.028, partial eta squared 0.118 matches."}
+{"id": "pmc-0090", "label": "supported", "category": "correct", "status": "confirmed", "note": "Correct but derived: the percentages pool both arms ((16 + 28) / 220 = 20%). The number check passes only because 20/26/19 also appear elsewhere in the table."}
+{"id": "pmc-0091", "label": "supported", "category": "correct", "status": "confirmed", "note": "516 (61.4%), 483 (57.4%), 398 (47.3%) match."}
+{"id": "pmc-0093", "label": "supported", "category": "correct", "status": "confirmed", "note": "Group sizes, GA and BW match."}
+{"id": "pmc-0096", "label": "supported", "category": "correct", "status": "confirmed", "note": "Sensitivity 35.6%, specificity 96.2%, AUC 0.659 match."}
+{"id": "pmc-0103", "label": "supported", "category": "correct", "status": "confirmed", "note": "p = 0.002 (T1), p = 0.007 (T2) and d = 0.598 to 0.781 match."}
+{"id": "pmc-0120", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "'Proved ... identical' and 'complete baseline equivalence across all clinical measures' from two non-significant tests."}
+{"id": "pmc-0132", "label": "supported", "category": "not_an_error", "status": "confirmed", "note": "The table's footnote b on this row says p < 0.05 versus placebo, so superiority over placebo is supported; p < 0.0005 is the within-group change, as in the original. Injected error is not actually an error."}
+{"id": "pmc-0138", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "'Definitively caused' overstates a trial difference (60% of controls also resumed voiding)."}
+{"id": "pmc-0144", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "'Proved ... caused superior improvement' from an interaction effect whose direction the table doesn't show."}
+{"id": "pmc-0150", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "The original reports significance at follow-up only; the claim adds post-test."}
+{"id": "pmc-0156", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "An ICER does not show that one arm is 'conclusively superior'."}
+{"id": "pmc-0180", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "7.4% vs 7.5% with no test showing a difference; 'significantly superior' is invented."}
+{"id": "pmc-0186", "label": "not_supported", "category": "real_overstatement", "status": "confirmed", "note": "'Eliminated' and 'statistically significant superiority' with an odds ratio CI of 0.013-8.21 that spans 1."}
+{"id": "pmc-0139", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'Did not predict' became 'did predict' with p = 0.143 and 0.743."}
+{"id": "pmc-0205", "label": "not_supported", "category": "real_subtle_error", "status": "confirmed", "note": "'No significant difference' became 'no difference' (55.4% vs 68.4%). Also a pre-existing author error: the original sentence swaps the Pre- and Post-tramadol percentages (table: 57.9% and 68.4%), so a catch may be for the swap."}

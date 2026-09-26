@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync, appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
 import { checkBaseline } from "../agents/baseline.js";
+import { checkFastPath } from "../agents/resolver.js";
 import { checkWithRetries } from "../agents/tool-agent.js";
 import { ZERO_USAGE } from "../llm.js";
 import { isQuoteGrounded } from "../quote.js";
@@ -37,6 +38,7 @@ interface AgentOutput {
   /** Text the quote must be found in. */
   sourceText: string;
   trace?: AgentTrace;
+  resolution?: RunRecord["resolution"];
 }
 type Agent = (item: BenchItem, model: string) => Promise<AgentOutput>;
 
@@ -62,6 +64,23 @@ const AGENTS: Record<string, (ds: Dataset) => Agent> = {
         retries,
       );
   },
+  /**
+   * Resolve a named section in code and make one model call. Search with the tool agent
+   * only when the citation names a whole document, or a section too long to paste.
+   */
+  resolve: () => {
+    const store = loadStore(args.dataset!, args.corpus as CorpusVariant);
+    let index: SearchIndex | undefined;
+    const retries = Number(args.retries);
+    return async (item, model) => {
+      const input = { claim: item.claim, citation: item.citation };
+      const fast = await checkFastPath(input, store, model);
+      if (fast) return fast;
+      index ??= new SearchIndex(buildChunks(store));
+      const searched = await checkWithRetries(input, () => new ToolBox(store, index!), store, model, retries);
+      return { ...searched, resolution: "search" as const };
+    };
+  },
 };
 
 async function main() {
@@ -73,7 +92,8 @@ async function main() {
   const agent = makeAgent(ds);
   const items = args.limit ? ds.items.slice(0, Number(args.limit)) : ds.items;
   const model = args.model!;
-  const variant = agentName === "tool" ? `tool-${args.corpus}-r${args.retries}` : agentName;
+  const variant =
+    agentName === "tool" ? `tool-${args.corpus}-r${args.retries}` : agentName === "resolve" ? `resolve-${args.corpus}` : agentName;
 
   const runsDir = join(import.meta.dirname, "..", "..", "runs");
   mkdirSync(runsDir, { recursive: true });
@@ -89,12 +109,13 @@ async function main() {
     const started = Date.now();
     let record: RunRecord;
     try {
-      const { result, usage, sourceText, trace } = await agent(item, model);
+      const { result, usage, sourceText, trace, resolution } = await agent(item, model);
       record = {
         item, model, agent: variant, result, usage,
         quoteGrounded: result.quote.trim() ? isQuoteGrounded(result.quote, sourceText) : null,
         latencyMs: Date.now() - started,
         ...(trace && { trace }),
+        ...(resolution && { resolution }),
       };
     } catch (err: any) {
       record = {
@@ -115,6 +136,13 @@ async function main() {
     JSON.stringify({ model, agent: variant, dataset: args.dataset, split: args.split, ...report }, null, 2),
   );
   console.log(`\n${formatReport(report)}\n\nrecords: ${recordsPath}`);
+  if (agentName === "resolve") {
+    const counts = { section: 0, missing: 0, search: 0 };
+    for (const r of records) if (r.resolution) counts[r.resolution]++;
+    console.log(
+      `resolution: ${counts.section} section (one model call), ${counts.missing} missing (no model call), ${counts.search} search (tool agent)`,
+    );
+  }
   const errors = records.filter((r) => r.error).slice(0, 3);
   for (const e of errors) console.log(`  error sample: ${e.error}`);
 }

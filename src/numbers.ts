@@ -47,6 +47,19 @@ export interface MissingNumber {
   nearest: string[];
 }
 
+/**
+ * Note for a "supported" verdict whose claim contains numbers the cited source does not.
+ * Null when every informative number is present (exact, or a more precise source value that rounds to it).
+ */
+export function missingNumberNote(claim: string, sourceText: string, label: string): string | null {
+  const missing = missingNumbers(claim, sourceText);
+  if (!missing.length) return null;
+  const list = missing
+    .map((m) => `${m.number}${m.nearest.length ? ` (closest there: ${m.nearest.join(", ")})` : ""}`)
+    .join(", ");
+  return `the verdict was "supported" but the claim's ${list} ${missing.length > 1 ? "do" : "does"} not appear in ${label}. Compare every number in the claim with the source; if a number is legitimately derived from it (e.g. a difference, or a percentage computed from counts), say so in the reason`;
+}
+
 /** The claim's informative numbers that don't appear in the source text. */
 export function missingNumbers(claim: string, sourceText: string, nearestCount = 2): MissingNumber[] {
   const source = numbersIn(sourceText);

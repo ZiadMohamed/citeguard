@@ -1,6 +1,7 @@
 import { parseLocation, sameLocation, type Loc } from "../bench/locations.js";
-import { missingNumbers } from "../numbers.js";
+import { missingNumberNote } from "../numbers.js";
 import { isQuoteGrounded, ungroundedFragments } from "../quote.js";
+import { resolveLocation } from "../resolve.js";
 import type { DocStore } from "../tools/store.js";
 import type { AgentTrace, Attempt, CheckResult } from "../types.js";
 
@@ -51,16 +52,8 @@ export function objectiveFailures(
 
   if (opts.checkNumbers && result.verdict === "supported" && cited) {
     const source = citedSource(cited, store);
-    const missing = source ? missingNumbers(input.claim, source.text) : [];
-    if (source && missing.length) {
-      const list = missing
-        .map((m) => `${m.number}${m.nearest.length ? ` (closest there: ${m.nearest.join(", ")})` : ""}`)
-        .join(", ");
-      failures.push({
-        code: "number_missing",
-        message: `the verdict was "supported" but the claim's ${list} ${missing.length > 1 ? "do" : "does"} not appear in ${source.label}. Compare every number in the claim with the source; if a number is legitimately derived from it (e.g. a difference, or a percentage computed from counts), say so in the reason`,
-      });
-    }
+    const gap = source ? missingNumberNote(input.claim, source.text, source.label) : null;
+    if (gap) failures.push({ code: "number_missing", message: gap });
   }
   return failures;
 }
@@ -72,11 +65,7 @@ function locationExists(loc: Loc, store: DocStore): boolean {
 
 /** The cited table, or the whole document when the citation names no table. */
 function citedSource(cited: Loc, store: DocStore): { label: string; text: string } | null {
-  const doc = store.get(cited.doc);
-  if (!doc) return null;
-  if (cited.table === null) {
-    return { label: doc.id, text: [doc.title, ...doc.sections.map((s) => `${s.heading}\n${s.text}`)].join("\n") };
-  }
-  const section = store.findSection(doc, `Table ${cited.table}`);
-  return section ? { label: `${doc.id}, ${section.label}`, text: `${section.heading}\n${section.text}` } : null;
+  const resolved = resolveLocation(store, cited);
+  if (resolved.kind === "missing") return null;
+  return { label: resolved.label, text: resolved.numberText };
 }

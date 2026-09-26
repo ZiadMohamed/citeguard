@@ -1,0 +1,5 @@
+{"id":"mini-ok","dataset":"mini","claim":"Hemoglobin was 12.3 in the iron arm.","citation":"PMC1, Table 2","targetId":"PMC1/Table 2","label":"supported","errorType":"SUPPORTED"}
+{"id":"mini-mismatch","dataset":"mini","claim":"Hemoglobin was 13.2 in the iron arm.","citation":"PMC1, Table 2","targetId":"PMC1/Table 2","label":"not_supported","errorType":"value_mismatch"}
+{"id":"mini-missing","dataset":"mini","claim":"Hemoglobin was 12.3 in the iron arm.","citation":"PMC1, Table 9","targetId":null,"label":"wrong_target","errorType":"nonexistent_target"}
+{"id":"mini-wrong-table","dataset":"mini","claim":"Hemoglobin was 12.3 in the iron arm.","citation":"PMC1, Table 1","targetId":"PMC1/Table 1","label":"wrong_target","errorType":"wrong_location"}
+{"id":"mini-doc","dataset":"mini","claim":"Hemoglobin was 12.3 in the iron arm.","citation":"Smith et al. 2020 (PMC1)","targetId":null,"label":"supported","errorType":"SUPPORTED"}

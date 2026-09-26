@@ -21,7 +21,8 @@ export interface LabelOverride {
 }
 
 export function loadDataset(name: string, split: "sample" | "full"): Dataset {
-  const dir = join(DATA_DIR, name);
+  const fixture = join(ROOT, "fixtures", name);
+  const dir = existsSync(fixture) ? fixture : join(DATA_DIR, name);
   const items = readJsonl<BenchItem>(join(dir, split === "sample" ? "items_sample.jsonl" : "items.jsonl"));
   const docs = new Map(readJsonl<SourceDoc>(join(dir, "corpus.jsonl")).map((d) => [d.id, d]));
   return { items, docs };

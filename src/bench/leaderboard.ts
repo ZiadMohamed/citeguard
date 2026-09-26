@@ -1,7 +1,7 @@
 /**
  * Scores saved runs against the current reviewed labels, with no API calls.
  *
- *   pnpm leaderboard [--dataset pmc] [--split sample] [--ref <run-name-substring>] [--min-n 90]
+ *   pnpm leaderboard [--dataset pmc] [--split sample] [--ref <run-name-substring>] [--min-n <records>]
  *
  * One row per run: catch, false alarms, subtle overstatement, first attempt (before retries),
  * cost, latency. With --ref, each row also shows a paired comparison against that run on the
@@ -24,7 +24,8 @@ const { values: args } = parseArgs({
     dataset: { type: "string", default: "pmc" },
     split: { type: "string", default: "sample" },
     ref: { type: "string" },
-    "min-n": { type: "string", default: "90" },
+    /** Default: 90% of the dataset's size, so small sets (csr, 37 items) show and partial runs don't. */
+    "min-n": { type: "string" },
     filter: { type: "string" },
   },
 });
@@ -40,12 +41,13 @@ export interface Scored {
 
 /** Only runs on the current item set count: an older sample with different ids is not comparable. */
 const currentIds = new Set(loadDataset(args.dataset!, args.split as "sample" | "full").items.map((i) => i.id));
+const minN = args["min-n"] !== undefined ? Number(args["min-n"]) : Math.ceil(currentIds.size * 0.9);
 
 const runs: Scored[] = readdirSync(runsDir)
   .filter((f) => f.endsWith(".jsonl") && f.includes(prefix))
   .filter((f) => !args.filter || f.includes(args.filter))
   .map((f) => ({ name: f.replace(/\.jsonl$/, ""), records: applyOverrides(readJsonl<RunRecord>(join(runsDir, f)), overrides) }))
-  .filter((r) => r.records.length >= Number(args["min-n"]))
+  .filter((r) => r.records.length >= minN)
   .filter((r) => r.records.every((rec) => currentIds.has(rec.item.id)));
 
 const isFlag = (r: RunRecord) => r.result !== null && r.result.verdict !== "supported";

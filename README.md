@@ -2,7 +2,7 @@
 
 An agent that checks citations in regulatory documents: for each claim + citation, does the cited source actually back it up?
 
-The writeup of what was measured, and what was cut, is [`WRITEUP.md`](WRITEUP.md).
+The writeup of what was measured, and what was cut, is [`WRITEUP.md`](WRITEUP.md) (being rewritten; not committed yet).
 
 The benchmark sets (`data/pmc`, `data/pmchard`, `data/pmcrefs` items), the reviewed labels (`labels/`) and every saved run (`runs/`) are committed, so `pnpm leaderboard`, `pnpm scan`, `pnpm extract:eval`, `pnpm audit:tables` and `pnpm bench --dataset pmc` work from a fresh clone. The raw XML/PDF downloads and the full-text stores are not; rebuild them with the `prep:*` scripts (needs `uv`) for `--corpus full`, `--corpus pdf` and SciFact.
 

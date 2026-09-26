@@ -1,6 +1,6 @@
 import { chat, addUsage, ZERO_USAGE } from "../llm.js";
 import { missingNumbers } from "../numbers.js";
-import { resolveCitation } from "../resolve.js";
+import { resolveCitation, type Resolution } from "../resolve.js";
 import { buildNumberIndex, suggestSources } from "../submission.js";
 import type { DocStore } from "../tools/store.js";
 import type { CheckResult, Usage } from "../types.js";
@@ -56,12 +56,33 @@ export async function suggestFix(
   if (verdict.verdict === "wrong_target" || resolved.kind !== "section") {
     return fixCitation(input, verdict, store, model, opts);
   }
-  // Numbers missing here but all present in another section: the citation is what's wrong.
-  // Rewriting the claim to fit the wrong table would make a true sentence false.
-  if (missingNumbers(input.claim, resolved.numberText).length) {
-    const moved = await fixCitation(input, verdict, store, model, opts);
-    if (moved.citation || moved.candidates?.length) return moved;
+  // Numbers missing here but all present in another section: the citation may be what's wrong.
+  // Rewriting a true sentence to fit the wrong table would make it false, so try moving the
+  // citation first. But only a move the checker accepts counts: numbers can match elsewhere by
+  // coincidence (a claim's "7.9" against an SD of 7.9), and then the rewrite below is the fix.
+  // A rewrite is only tried when at most one number is missing (a typo like 7.9 for -7.7). Several
+  // missing numbers mean the sentence belongs to another table, and a rewrite would change its meaning.
+  let moved: Fix | null = null;
+  const missing = missingNumbers(input.claim, resolved.numberText);
+  if (missing.length) {
+    moved = await fixCitation(input, verdict, store, model, opts);
+    if (moved.citation || (missing.length > 1 && moved.candidates?.length)) return moved;
   }
+  const rewritten = await rewriteClaim(input, verdict, resolved, store, model, opts);
+  if (moved) rewritten.usage = addUsage(moved.usage, rewritten.usage);
+  // Neither worked: say where the numbers are, for a person to look at.
+  if (!rewritten.text && moved?.candidates?.length) return { ...moved, usage: rewritten.usage };
+  return rewritten;
+}
+
+async function rewriteClaim(
+  input: { claim: string; citation: string },
+  verdict: CheckResult,
+  resolved: Resolution,
+  store: DocStore,
+  model: string,
+  opts: FastPathOptions,
+): Promise<Fix> {
 
   // Numbers the source holds. A rewrite may reuse these and the claim's own verified numbers; any
   // other number is invented. (A difference "7.7" for a source "-7.7" is allowed: sign is words.)

@@ -1,6 +1,6 @@
 # CiteGuard handoff
 
-> **Update:** later sessions built the tool-using agent, a hard corpus, a report-cites-report benchmark, a number check and a model sweep. Read this file for background and working style, then [`HANDOFF-2.md`](HANDOFF-2.md), [`HANDOFF-3.md`](HANDOFF-3.md), then **[`HANDOFF-4.md`](HANDOFF-4.md)** (the latest). Each later file marks what's stale in the one before it.
+> **Update:** the plan that follows was narrowed in [`HANDOFF-5.md`](HANDOFF-5.md). The writeup is [`WRITEUP.md`](WRITEUP.md). Read this file for the assignment and working style, then the later handoffs only for history. [`HANDOFF-5.md`](HANDOFF-5.md) says what not to rebuild.
 
 Context for an LLM picking this project up in a new chat. Read this fully before acting, then read `WRITEUP.md` (local-only draft) and skim `README.md`. You are expected to continue the work **and** push back on the plan where it's weak. There's a "Challenge these" section at the end with the doubts I had.
 

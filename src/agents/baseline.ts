@@ -16,6 +16,8 @@ export interface CheckInput {
   citation: string;
   /** null when the citation doesn't resolve to any document. */
   source: SourceDoc | null;
+  /** Set when a previous attempt failed an objective check, such as a missing number. */
+  note?: string;
 }
 
 /** No tools, one call: the runner hands the model the already-resolved cited text. */
@@ -31,7 +33,9 @@ export async function checkBaseline(
     { role: "system" as const, content: SYSTEM },
     {
       role: "user" as const,
-      content: `Claim: ${input.claim}\nCitation: ${input.citation}\n\n<source>\n${sourceBlock}\n</source>`,
+      content: `Claim: ${input.claim}\nCitation: ${input.citation}\n\n<source>\n${sourceBlock}\n</source>${
+        input.note ? `\n\nA previous attempt at this check was rejected because ${input.note}.` : ""
+      }`,
     },
   ];
 

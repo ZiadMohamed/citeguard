@@ -45,6 +45,9 @@ export interface AgentStats {
   maxPeakPromptTokens: number;
   /** Average calls per check, by tool. */
   toolUse: Record<string, number>;
+  /** Checks that ran the tool loop. The averages above are over these, not over lookup-only checks. */
+  checksWithTools: number;
+  checks: number;
   /** Checks that needed at least one fresh-context retry. */
   retried: number;
   /** Checks whose final attempt still failed an objective check. */
@@ -144,6 +147,8 @@ function agentStats(records: RunRecord[]): Pick<Summary, "agent"> {
       avgToolCalls: calls.reduce((a, b) => a + b, 0) / calls.length,
       p95ToolCalls: percentile(calls, 0.95),
       maxToolCalls: calls[calls.length - 1]!,
+      checksWithTools: traced.length,
+      checks: records.length,
       budgetExhausted: traced.filter((t) => t.budgetExhausted).length,
       avgPeakPromptTokens: peaks.reduce((a, b) => a + b, 0) / peaks.length,
       maxPeakPromptTokens: Math.max(...peaks),
@@ -200,9 +205,9 @@ export function formatSummary(s: Summary): string {
     ...(s.locationSuggestion ? [`right location suggested (wrong-target items)  ${pct(s.locationSuggestion)}`] : []),
     ...(s.agent
       ? [
-          `tool calls avg ${s.agent.avgToolCalls.toFixed(1)}  p95 ${s.agent.p95ToolCalls}  max ${s.agent.maxToolCalls}   budget exhausted ${s.agent.budgetExhausted}`,
+          `tool calls avg ${s.agent.avgToolCalls.toFixed(1)}  p95 ${s.agent.p95ToolCalls}  max ${s.agent.maxToolCalls}   on ${s.agent.checksWithTools} of ${s.agent.checks} checks   budget exhausted ${s.agent.budgetExhausted}`,
           `peak context tokens avg ${Math.round(s.agent.avgPeakPromptTokens)}  max ${s.agent.maxPeakPromptTokens}`,
-          `tool use per check: ${Object.entries(s.agent.toolUse)
+          `tool use per tool check: ${Object.entries(s.agent.toolUse)
             .sort(([, a], [, b]) => b - a)
             .map(([k, v]) => `${k} ${v.toFixed(2)}`)
             .join(", ")}`,

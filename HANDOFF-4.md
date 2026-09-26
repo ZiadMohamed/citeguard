@@ -1,5 +1,7 @@
 # CiteGuard handoff, part 4 (session of Fri Sep 25, 2026, night)
 
+> **Update:** superseded by [`HANDOFF-5.md`](HANDOFF-5.md) and [`WRITEUP.md`](WRITEUP.md). The git section below is stale (`HEAD` is Phase 4, `8052ebd`). Do not resume the sweep or the pmcrefs crawl from this file.
+
 For an LLM picking this project up in a new chat. Read in this order:
 
 1. [`HANDOFF.md`](HANDOFF.md): sections 1–2 (the assignment, stakeholder answers, how Ziad wants to work, commit rules) still apply in full.

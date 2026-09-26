@@ -58,6 +58,12 @@ export interface RunRecord {
   latencyMs: number;
   /** Tool-using agents only. */
   trace?: AgentTrace;
+  /**
+   * Resolver only. "section" and "missing" were decided from the citation text.
+   * "search" means the citation named a whole document (or a section too long to paste),
+   * so the tool agent ran.
+   */
+  resolution?: "section" | "missing" | "search";
 }
 
 export interface ToolStep {

@@ -69,6 +69,8 @@ interface PaperRow {
 }
 
 export function loadStore(dataset: string, variant: CorpusVariant): DocStore {
+  const fixtureDocs = join(DATA_DIR, "..", "fixtures", dataset, "docs.jsonl");
+  if (existsSync(fixtureDocs)) return new DocStore(readJsonl<Document>(fixtureDocs));
   if (dataset !== "pmc" && dataset !== "pmcrefs") {
     throw new Error(`The tool agent supports the pmc and pmcrefs datasets (got "${dataset}")`);
   }
